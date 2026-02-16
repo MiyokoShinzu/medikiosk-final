@@ -1,4 +1,104 @@
-<?php $title = "MediKiosk Login"; ?>
+<?php
+$title = "MediKiosk Login";
+session_start();
+
+include "src/connection.php";
+
+$mysqli = $mysqli;
+
+if (!($mysqli instanceof mysqli)) {
+    http_response_code(500);
+    die("Database connection not available. Check src/connection.php");
+}
+
+$mysqli->set_charset("utf8mb4");
+
+function h($s)
+{
+    return htmlspecialchars((string)$s, ENT_QUOTES, "UTF-8");
+}
+
+$redirectTo = "dashboard.php";
+
+$alert = "";
+$alertType = "info";
+$doRedirect = false;
+
+if (isset($_GET["api"]) && $_GET["api"] === "login") {
+
+    $username = trim((string)($_GET["username"] ?? ""));
+    $password = (string)($_GET["password"] ?? "");
+
+    if ($username === "" || $password === "") {
+        $alertType = "warning";
+        $alert = "Please enter both username and password.";
+    } else {
+        $table = null;
+
+        if (stripos($username, "K-") === 0) {
+            $table = "kiosk_table";
+        } elseif (stripos($username, "P-") === 0) {
+            $table = "accounts";
+        } else {
+            $alertType = "warning";
+            $alert = "Invalid username format. Use K-... or P-...";
+        }
+
+        if ($table) {
+            $sql = "SELECT * FROM {$table} WHERE username = ? LIMIT 1";
+            $stmt = $mysqli->prepare($sql);
+
+            if (!$stmt) {
+                $alertType = "danger";
+                $alert = "Server error. Please try again.";
+            } else {
+                $stmt->bind_param("s", $username);
+                $stmt->execute();
+                $res = $stmt->get_result();
+                $row = $res ? $res->fetch_assoc() : null;
+                $stmt->close();
+
+                if (!$row) {
+                    $alertType = "danger";
+                    $alert = "Username does not exist.";
+                } else {
+                    $dbPass = (string)$row["password"];
+                    $ok = password_verify($password, $dbPass) || hash_equals($dbPass, $password);
+
+                    if (!$ok) {
+                        $alertType = "danger";
+                        $alert = "Incorrect password.";
+                    } else {
+                        $_SESSION["logged_in"] = true;
+                        $_SESSION["user_id"] = $row["id"];
+                        $_SESSION["username"] = $row["username"];
+                        $_SESSION["email"] = $row["email"] ?? "N/A";
+                        $_SESSION["source_table"] = $table;
+                        $_SESSION["access"] = $row["access"];
+
+                        $alertType = "success";
+                        $alert = "Login successful. Redirecting…";
+                        if($row['access']==3){
+                            $redirectTo = "kiosk.php";
+                        }
+                        else if($row['access']==2){
+                            $redirectTo = "dashboard.php";
+                        }
+                        else if($row['access']==0){
+                            $redirectTo = "admin.php";
+                        }
+                        else{
+                            $redirectTo = "login.php";
+                        }
+                        $doRedirect = true;
+                    }
+                }
+            }
+        }
+    }
+}
+?>
+
 <?php include 'globals/head.php'; ?>
 
 <body class="bg-light min-vh-100 overflow-hidden d-flex align-items-center">
@@ -21,8 +121,8 @@
 
                                 <div class="mt-4 d-none d-lg-block">
                                     <div class="feature-pill mb-2">Fast access</div>
-                                    <div class="feature-pill mb-2">Role-based login</div>
-                                    <div class="feature-pill">Touch-friendly UI</div>
+                                    <div class="feature-pill mb-2">Secure Login</div>
+                                    <div class="feature-pill">UI-Friendly Design</div>
                                 </div>
                             </div>
                         </div>
@@ -38,12 +138,32 @@
                                     <p class="brand-subtitle mb-0">Secure kiosk sign-in</p>
                                 </div>
 
-                                <form action="login_process.php" method="POST" class="w-100" autocomplete="off">
+                                <?php if ($alert !== ""): ?>
+                                    <div class="alert alert-<?php echo h($alertType); ?> mb-3" role="alert">
+                                        <?php echo h($alert); ?>
+                                    </div>
+
+                                    <?php if ($doRedirect): ?>
+                                        <meta http-equiv="refresh" content="1;url=<?php echo h($redirectTo); ?>">
+                                        <script>
+                                            setTimeout(() => {
+                                                window.location.href = <?php echo json_encode($redirectTo); ?>;
+                                            }, 1000);
+                                        </script>
+                                    <?php endif; ?>
+                                <?php endif; ?>
+
+                                <form action="" method="GET" class="w-100" autocomplete="off">
+                                    <input type="hidden" name="api" value="login">
+
                                     <div class="mb-3">
                                         <label class="form-label fw-semibold" for="username">Username</label>
                                         <input type="text" id="username" name="username"
                                             class="form-control form-control-lg input-soft"
-                                            placeholder="Enter username" required>
+                                            placeholder="Enter username"
+                                            value="<?php echo h($_GET["username"] ?? ""); ?>"
+                                            required>
+                                        <div class="form-text">Use <strong>K-</strong> for kiosk, <strong>P-</strong> for individual accounts.</div>
                                     </div>
 
                                     <div class="mb-3">
@@ -57,16 +177,6 @@
                                                 <span id="toggleIcon">Show</span>
                                             </button>
                                         </div>
-                                    </div>
-
-                                    <div class="d-flex align-items-center justify-content-between gap-3 flex-wrap mb-3">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="1" id="remember"
-                                                name="remember">
-                                            <label class="form-check-label" for="remember">Remember me</label>
-                                        </div>
-
-                                       
                                     </div>
 
                                     <button type="submit" class="btn btn-primary btn-lg w-100 login-btn">

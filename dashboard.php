@@ -27,29 +27,7 @@
 <body class="bg-light min-vh-100">
 
     <div class="kiosk-shell">
-        <header class="kiosk-topbar">
-            <div class="topbar-left">
-                <div class="brand-mini">
-                    <div class="brand-mini-title">MediKiosk</div>
-                    <div class="brand-mini-subtitle">Dashboard</div>
-                </div>
-            </div>
-
-            <div class="topbar-center d-none d-md-flex">
-                <div class="status-pill">
-                    <span id="dateTime">--</span>
-                </div>
-                <a href="hotline.php" class="btn btn-sm btn-outline-primary topbar-btn" style="border-radius:14px;font-weight:900;">
-                    Hotline Numbers
-                </a>
-            </div>
-
-            <div class="topbar-right">
-                <a href="logout.php" class="btn btn-sm btn-secondary topbar-btn" aria-label="Logout" title="Logout">
-                    <i class="bi bi-box-arrow-right"></i>
-                </a>
-            </div>
-        </header>
+       <?php include "globals/kiosk_header.php"; ?>
 
         <main class="kiosk-main container-fluid px-3 px-sm-4 px-lg-5 py-4">
             <div class="row g-4">
