@@ -72,7 +72,7 @@ $kiosk_id = (int)($_SESSION['kiosk_id'] ?? 0);
                         </div>
 
                         <div class="table-responsive">
-                            <table id="medicineTable" class="table table-striped table-bordered align-middle mb-0 w-100">
+                            <table id="medicineTable" class="table table-hover table-bordered align-middle mb-0 w-100">
                                 <thead class="table-light">
                                     <tr class="text-center">
                                         <th style="width:80px;" class="text-center">Image</th>
