@@ -506,8 +506,8 @@
                                 <td class="text-center">
                                 <a href="medicine.php?kiosk_id=${item.id}&kiosk_name=${item.name}" class="btn btn-sm btn-success btn-view ms-1"><i class="bi bi-prescription2" title="Manage Medicines"></i></a>
                                   <button class="btn btn-sm btn-primary btn-edit"><i class="bi bi-pencil-square" title="Edit Kiosk"></i></button>
-                                  <button class="btn btn-sm btn-success btn-save d-none">Save</button>
-                                  <button class="btn btn-sm btn-secondary btn-cancel d-none ms-1">Cancel</button>
+                                  <button class="btn btn-sm btn-success btn-save d-none"><i class="bi bi-check-lg"></i></button>
+                                  <button class="btn btn-sm btn-secondary btn-cancel d-none ms-1"><i class="bi bi-x-lg"></i></button>
                                   <button class="btn btn-sm btn-danger btn-delete ms-1"><i class="bi bi-trash" title="Delete Kiosk"></i></button>
 
                                 </td>
