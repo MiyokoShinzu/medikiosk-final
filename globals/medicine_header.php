@@ -162,7 +162,7 @@
     }
 
     td {
-        font-size: 12px;
+        font-size: 11px;
     }
 
     table.dataTable.dtr-inline.collapsed>tbody>tr>td.dtr-control::before,
