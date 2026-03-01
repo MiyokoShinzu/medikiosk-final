@@ -75,9 +75,12 @@ if (isset($_GET["api"]) && $_GET["api"] === "login") {
                         $_SESSION["email"] = $row["email"] ?? "N/A";
                         $_SESSION["source_table"] = $table;
                         $_SESSION["access"] = $row["access"];
+                        $_SESSION["kiosk_id"] = $row["id"] ?? "Unknown Kiosk";
+                        $_SESSION["kiosk_name"] = $row["name"] ?? "Unknown Kiosk";
+                        $_SESSION["address"] = $row["address"] ?? "Unknown Kiosk";
 
                         $alertType = "success";
-                        $alert = "Login successful. Redirecting…";
+                        $alert = "Login successful. Redirecting…". $row["access"];
                         if($row['access']==3){
                             $redirectTo = "kiosk.php";
                         }

@@ -1,5 +1,9 @@
 <?php $title = "MediKiosk Dashboard"; ?>
 <?php include 'globals/head.php'; ?>
+<?php
+if (session_status() === PHP_SESSION_NONE) session_start();
+$kiosk_id = (int)($_SESSION['kiosk_id'] ?? 0);
+?>
 <style>
     .topbar-center {
         display: flex;
@@ -27,7 +31,8 @@
 <body class="bg-light min-vh-100">
 
     <div class="kiosk-shell">
-       <?php include "globals/kiosk_header.php"; ?>
+        <?php include "globals/dashboard_header.php"; ?>
+        <?php include "globals/dashboard_topbar.php"; ?>
 
         <main class="kiosk-main container-fluid px-3 px-sm-4 px-lg-5 py-4">
             <div class="row g-4">
@@ -67,6 +72,7 @@
                                                     <option value="Vitamins & Supplements">Vitamins & Supplements</option>
                                                     <option value="Skin Care">Skin Care</option>
                                                     <option value="First Aid">First Aid</option>
+                                                    <option value="Others">Others</option>
                                                 </select>
                                                 <span class="select-ico"><i class="bi bi-chevron-down"></i></span>
                                             </div>
@@ -121,7 +127,7 @@
         <footer class="kiosk-footer px-3 px-sm-4 px-lg-5 py-3">
             <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
                 <small class="text-muted">© <?php echo date("Y"); ?> ets-dev</small>
-                <small class="text-muted">Rodamel Drug Store</small>
+                <small class="text-muted"><?php echo $_SESSION['address']; ?></small>
             </div>
         </footer>
 
@@ -489,106 +495,44 @@
 
         const infoModal = (window.bootstrap && bootstrap.Modal) ? new bootstrap.Modal(infoModalEl) : null;
 
-        const meds = [{
-                id: 1,
-                name: "Paracetamol 500mg",
-                brand: "Biogesic (Generic)",
-                category: "Pain & Fever",
-                unit: "Tablets",
-                available: true,
-                prescription: false,
-                notes: "For fever and mild pain. Common OTC medicine.",
-                img: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=1200&q=60"
-            },
-            {
-                id: 2,
-                name: "Ibuprofen 200mg",
-                brand: "Advil (Generic)",
-                category: "Pain & Fever",
-                unit: "Tablets",
-                available: true,
-                prescription: false,
-                notes: "Anti-inflammatory pain relief. Take with food if sensitive.",
-                img: "https://images.unsplash.com/photo-1607619056574-7b8d3ee536b8?auto=format&fit=crop&w=1200&q=60"
-            },
-            {
-                id: 3,
-                name: "Amoxicillin 500mg",
-                brand: "Amoxil (Generic)",
-                category: "Antibiotic",
-                unit: "Capsules",
-                available: true,
-                prescription: true,
-                notes: "Antibiotic. Requires prescription. Follow doctor’s instructions.",
-                img: "https://images.unsplash.com/photo-1587854692152-cbe660dbde88?auto=format&fit=crop&w=1200&q=60"
-            },
-            {
-                id: 4,
-                name: "Cetirizine 10mg",
-                brand: "Allerkid / Generic",
-                category: "Allergy",
-                unit: "Tablets",
-                available: true,
-                prescription: false,
-                notes: "Allergy relief. May cause drowsiness in some people.",
-                img: "https://images.unsplash.com/photo-1584308667170-6b7980d7c9fd?auto=format&fit=crop&w=1200&q=60"
-            },
-            {
-                id: 5,
-                name: "Loperamide 2mg",
-                brand: "Diatabs (Generic)",
-                category: "Stomach & Digestion",
-                unit: "Capsules",
-                available: true,
-                prescription: false,
-                notes: "For diarrhea. Follow label instructions.",
-                img: "https://images.unsplash.com/photo-1587854692152-cbe660dbde88?auto=format&fit=crop&w=1200&q=60"
-            },
-            {
-                id: 6,
-                name: "Oral Rehydration Salts (ORS)",
-                brand: "Hydrite / Generic",
-                category: "Stomach & Digestion",
-                unit: "Sachets",
-                available: true,
-                prescription: false,
-                notes: "Helps prevent dehydration due to diarrhea or vomiting.",
-                img: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=1200&q=60"
-            },
-            {
-                id: 7,
-                name: "Vitamin C 500mg",
-                brand: "Ceelin / Generic",
-                category: "Vitamins & Supplements",
-                unit: "Tablets",
-                available: false,
-                prescription: false,
-                notes: "Currently unavailable for dispensing.",
-                img: "https://images.unsplash.com/photo-1620916566393-7b36c6b8c0d3?auto=format&fit=crop&w=1200&q=60"
-            },
-            {
-                id: 8,
-                name: "Cough Syrup (Dextromethorphan)",
-                brand: "Robitussin DM (Generic)",
-                category: "Cough & Cold",
-                unit: "Syrup",
-                available: true,
-                prescription: false,
-                notes: "For dry cough. Not for children unless advised.",
-                img: "https://images.unsplash.com/photo-1584308667170-6b7980d7c9fd?auto=format&fit=crop&w=1200&q=60"
-            },
-            {
-                id: 9,
-                name: "Povidone-Iodine Solution",
-                brand: "Betadine (Generic)",
-                category: "First Aid",
-                unit: "Solution",
-                available: true,
-                prescription: false,
-                notes: "Antiseptic for minor cuts and wound cleaning.",
-                img: "https://images.unsplash.com/photo-1584308666842-54b3c2c8c9f9?auto=format&fit=crop&w=1200&q=60"
-            }
-        ];
+        let meds = []; // will come from database (once)
+
+        /**
+         * Loads medicines ONCE from DB, filtered by session kiosk_id.
+         * API should query using $_SESSION['kiosk_id'] (recommended).
+         */
+        function loadMedicinesOnce() {
+            // optional: pass kiosk_id also (safe fallback)
+            const url = "api/select_medicine.php";
+
+            return fetch(url, {
+                    cache: "no-store"
+                })
+                .then(res => res.json())
+                .then(rows => {
+                    // rows expected like:
+                    // [{id,kiosk_id,name,brand,category,unit,availability(0/1),prescription(Yes/No),notes,image}, ...]
+                    meds = (Array.isArray(rows) ? rows : []).map(r => ({
+                        id: Number(r.id),
+                        name: r.name || "",
+                        brand: r.brand || "",
+                        category: r.category || "",
+                        unit: r.unit || "",
+                        available: String(r.availability) === "1", // 1/0 -> boolean
+                        prescription: String(r.prescription).toLowerCase() === "yes", // Yes/No -> boolean
+                        notes: r.notes || "",
+                        img: r.image || "" // should already be a path like "uploads/uuid.jpg" OR full URL
+                    }));
+
+                    // render using your existing system
+                    applyFilters();
+                })
+                .catch(err => {
+                    console.error(err);
+                    meds = [];
+                    applyFilters();
+                });
+        }
 
         const fallbackImgs = [
             "https://images.unsplash.com/photo-1587854692152-cbe660dbde88?auto=format&fit=crop&w=1200&q=60",
@@ -777,7 +721,7 @@
             }
         }
 
-        applyFilters();
+        loadMedicinesOnce(); // load from DB once, then calls applyFilters()
         autoFullscreen();
     </script>
     <script>

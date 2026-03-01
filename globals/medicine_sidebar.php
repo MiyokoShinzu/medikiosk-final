@@ -8,7 +8,7 @@
             </div>
             <div class="brand-text">
                 <div class="brand-title mb-1">MediKiosk</div>
-                <div class="brand-subtitle">Kiosk Panel</div>
+                <div class="brand-subtitle">Medicine Panel</div>
 
             </div>
         </div>
@@ -21,20 +21,25 @@
                 <span class="nav-txt">Dashboard</span>
             </a>
 
+            <a class="nav-item nav-light" href="kiosk.php">
+                <span class="nav-ic"><i class="bi bi-arrow-left-circle"></i></span>
+                <span class="nav-txt">Back to Kiosk</span>
+            </a>
             <a class="nav-item nav-danger" href="logout.php">
                 <span class="nav-ic">⎋</span>
                 <span class="nav-txt">Logout</span>
             </a>
         </div>
 
-        <div class="side-foot mt-auto">
-            <div class="status-row">
-                <span class="green-dot"></span>
-                <span class="status-text">System Online</span>
-            </div>
-            <div class="brand-subtitle border border-light m-3 rounded-4 text-white p-1 text-center" style="background: #023062ff;"> <span class="text-center  p-0 m-0b  " style="font-size: 10px; font-weight: bold;"><?= $username . "<br>" . $email ?>
-                    <span class="w-100 text-center mt-0">______________________</span></span></div>
-        </div>
+        <div class="side-foot mt-auto" style="background: #023062ff; overflow-x: hidden;">
+            
+           
+            <div class="brand-subtitle  m-3 rounded-4 text-white p-1 text-center fw-bold" > <?= $username . "<br>" . $email ?>
 
-    </div>
+            </div>
+
+
+
+
+        </div>
 </aside>

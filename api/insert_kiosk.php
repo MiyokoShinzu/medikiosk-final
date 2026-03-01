@@ -1,12 +1,14 @@
 <?php
 include '../src/connection.php';
-
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
     $username   = $_GET['username'] ?? '';
     $password   = $_GET['password'] ?? '';
     $name       = $_GET['name'] ?? '';
-    $account_id = $_GET['account_id'] ?? '';
+    $account_id = $_SESSION['user_id'] ?? '';
     $address    = $_GET['address'] ?? '';
 
     if ($username == '' || $password == '' || $name == '' || $account_id == '' || $address == '') {

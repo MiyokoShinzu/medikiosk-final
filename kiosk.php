@@ -1,8 +1,7 @@
 <?php $title = "MediKiosk Admin"; ?>
 <?php include 'globals/kiosk_header.php'; ?>
 
-
-<body class="bg-light min-vh-100 overflow-hidden">
+<body class="bg-light min-vh-100">
 
     <div class="app">
 
@@ -20,11 +19,15 @@
                     <div class="col-12 col-md-12">
                         <div class="stat-card">
                             <div class="stat-label">Total Kiosks</div>
-                            <div class="stat-value">3</div>
+                            <div class="stat-value"><?php include "src/connection.php"
+                                ;
+                                $result = $mysqli->query("SELECT COUNT(*) AS count FROM kiosk_table where account_id = $_SESSION[user_id]");
+                                $row = $result->fetch_assoc();
+                                echo $row['count'];
+                            ?></div>
                             <div class="stat-sub">Registered kiosks</div>
                         </div>
                     </div>
-                   
                 </div>
 
                 <div class="card table-card">
@@ -32,57 +35,20 @@
                         <div class="d-flex align-items-start justify-content-between gap-3 flex-wrap mb-3">
                             <div>
                                 <h3 class="section-title mb-1">Kiosk Table</h3>
-                                <p class="section-subtitle mb-0">Sample data (no API)</p>
-                            </div>
-                            <div class="search-wrap">
-                                <input class="form-control input-soft search-input" placeholder="Search kiosks...">
-                                <span class="search-icon">⌕</span>
                             </div>
                         </div>
 
-                        <div class="table-responsive soft-table">
-                            <table class="table align-middle mb-0">
+                        <div class="table-responsive">
+                            <table id="kioskTable" class="table align-middle mb-0 w-100">
                                 <thead>
-                                    <tr>
-                                        <th>Username</th>
-                                        <th>Name</th>
-                                        <th>Account ID</th>
-                                        <th>Address</th>
-                                        <th class="text-end">Actions</th>
+                                    <tr class="text-center">
+                                        <th class="text-center">Username</th>
+                                        <th class="text-center">Name</th>
+                                        <th class="text-center">Address</th>
+                                        <th class="text-center">Actions</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr>
-                                        <td class="fw-bold">K-001</td>
-                                        <td>Lobby Kiosk</td>
-                                        <td>1</td>
-                                        <td>City Center</td>
-                                        <td class="text-end">
-                                            <button class="btn btn-sm btn-outline-primary">Edit</button>
-                                            <button class="btn btn-sm btn-outline-danger ms-1">Delete</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="fw-bold">K-002</td>
-                                        <td>ER Kiosk</td>
-                                        <td>1</td>
-                                        <td>Emergency Wing</td>
-                                        <td class="text-end">
-                                            <button class="btn btn-sm btn-outline-primary">Edit</button>
-                                            <button class="btn btn-sm btn-outline-danger ms-1">Delete</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="fw-bold">K-003</td>
-                                        <td>Pharmacy Kiosk</td>
-                                        <td>2</td>
-                                        <td>Main Pharmacy</td>
-                                        <td class="text-end">
-                                            <button class="btn btn-sm btn-outline-primary">Edit</button>
-                                            <button class="btn btn-sm btn-outline-danger ms-1">Delete</button>
-                                        </td>
-                                    </tr>
-                                </tbody>
+                                <tbody></tbody>
                             </table>
                         </div>
 
@@ -95,7 +61,53 @@
 
     </div>
 
+    <!-- ADD KIOSK MODAL (ADDED) -->
+    <div class="modal fade" id="add_kiosk_modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Kiosk</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div id="addKioskAlert" class="alert alert-danger d-none mb-3"></div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Username (must start with K-)</label>
+                        <input id="k_username" class="form-control" placeholder="K-0001">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Password</label>
+                        <input id="k_password" type="password" class="form-control" placeholder="Password">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Name</label>
+                        <input id="k_name" class="form-control" placeholder="Kiosk Name">
+                    </div>
+
+                  
+
+                    <div class="mb-3">
+                        <label class="form-label">Address</label>
+                        <input id="k_address" class="form-control" placeholder="Address">
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                    <button id="btnAddKiosk" class="btn btn-primary">Save</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
     <?php include 'globals/scripts.php'; ?>
+
 
     <style>
         :root {
@@ -108,6 +120,11 @@
             --blue-soft: rgba(13, 110, 253, .10);
             --blue-border: rgba(13, 110, 253, .16);
             --green: #22c55e;
+        }
+
+        html,
+        body {
+            height: 100%;
         }
 
         .app {
@@ -270,6 +287,7 @@
             flex-direction: column;
             overflow: hidden;
             background: linear-gradient(180deg, rgba(13, 110, 253, .03), transparent 220px);
+            height: 100vh;
         }
 
         .topbar {
@@ -286,56 +304,8 @@
             gap: 12px;
         }
 
-        .top-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            min-width: 0;
-        }
-
-        .menu-btn {
-            border-radius: 14px;
-            font-weight: 900;
-            width: 46px;
-            height: 46px;
-            display: grid;
-            place-items: center;
-            border: 1px solid var(--soft-border);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, .06);
-        }
-
-        .top-titlewrap {
-            min-width: 0;
-        }
-
-        .top-kicker {
-            letter-spacing: .22em;
-            font-weight: 900;
-            font-size: .78rem;
-            color: var(--muted);
-            margin-bottom: 2px;
-        }
-
-        .top-title {
-            font-weight: 900;
-            letter-spacing: -.03em;
-            font-size: clamp(18px, 2.3vw, 28px);
-            line-height: 1.1;
-        }
-
-        .status-chip {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px 14px;
-            border-radius: 999px;
-            background: #fff;
-            border: 1px solid var(--soft-border);
-            font-weight: 900;
-            box-shadow: 0 12px 40px rgba(0, 0, 0, .06);
-        }
-
         .content {
+            flex: 1 1 auto;
             overflow: auto;
         }
 
@@ -382,48 +352,12 @@
             font-size: clamp(18px, 2.2vw, 24px);
         }
 
-        .section-subtitle {
-            color: var(--muted);
-            font-weight: 700;
-        }
-
-        .input-soft {
-            border-radius: 16px;
-            border: 1px solid rgba(0, 0, 0, .10);
-            background: var(--bg-soft);
-            padding-top: 12px;
-            padding-bottom: 12px;
-        }
-
-        .input-soft:focus {
-            background: #fff;
-            border-color: rgba(13, 110, 253, .60);
-            box-shadow: 0 0 0 .2rem rgba(13, 110, 253, .14);
-        }
-
-        .search-wrap {
-            position: relative;
-            min-width: min(420px, 78vw);
-        }
-
-        .search-input {
-            padding-left: 46px;
-        }
-
-        .search-icon {
-            position: absolute;
-            left: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            opacity: .6;
-            font-weight: 900;
-        }
-
         .soft-table {
             border-radius: 18px;
             overflow: hidden;
             border: 1px solid var(--soft-border);
             background: #fff;
+            width: 100%;
         }
 
         .table thead th {
@@ -439,7 +373,6 @@
             z-index: 1040;
         }
 
-        /* Collapsed: desktop behaves like Hostinger (content spans full width) */
         body.sidebar-collapsed .app {
             grid-template-columns: 0 1fr;
         }
@@ -454,7 +387,6 @@
             pointer-events: none;
         }
 
-        /* Mobile: sidebar overlays, main always full width */
         @media (max-width: 991.98px) {
             .app {
                 grid-template-columns: 1fr;
@@ -475,10 +407,24 @@
             body.sidebar-open .sidebar {
                 transform: translateX(0);
             }
+        }
 
-            .search-wrap {
-                min-width: 100%;
-            }
+        .dataTables_wrapper {
+            width: 100%;
+        }
+
+        .dataTables_wrapper .table {
+            margin-bottom: 0 !important;
+        }
+
+        .dataTables_wrapper .pagination {
+            margin-top: 14px;
+        }
+
+        .dataTables_scrollHeadInner,
+        .dataTables_scrollHeadInner table,
+        .dataTables_scrollBody table {
+            width: 100% !important;
         }
     </style>
 
@@ -512,11 +458,269 @@
             }
         }
 
-        toggleBtn.addEventListener("click", toggleSidebar);
+        if (toggleBtn) toggleBtn.addEventListener("click", toggleSidebar);
         overlay.addEventListener("click", closeMobileSidebar);
 
         window.addEventListener("resize", () => {
             if (!isMobile()) closeMobileSidebar();
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            let dt;
+
+            function fixDT() {
+                if (!dt) return;
+                dt.columns.adjust();
+                if (dt.responsive) dt.responsive.recalc();
+                setTimeout(() => {
+                    dt.columns.adjust();
+                    if (dt.responsive) dt.responsive.recalc();
+                    dt.draw(false);
+                }, 0);
+            }
+
+            document.addEventListener('transitionend', (e) => {
+                if (e.target.classList && e.target.classList.contains('app')) {
+                    fixDT();
+                }
+            });
+
+            window.addEventListener('resize', () => {
+                fixDT();
+            });
+
+            // ---- ADDED: reusable function to reload table without changing your code structure ----
+            function reloadKiosks() {
+                return fetch('api/select_kiosk.php')
+                    .then(res => res.json())
+                    .then(data => {
+                        var text = "";
+                        data.forEach(item => {
+                            text += `
+                              <tr data-id="${item.id}">
+                                <td class="text-center" data-field="username">${item.username}</td>
+                                <td class="text-center" data-field="name">${item.name}</td>
+                                <td class="text-center" data-field="address">${item.address}</td>
+                                <td class="text-center">
+                                <a href="medicine.php?kiosk_id=${item.id}&kiosk_name=${item.name}" class="btn btn-sm btn-success btn-view ms-1"><i class="bi bi-prescription2" title="Manage Medicines"></i></a>
+                                  <button class="btn btn-sm btn-primary btn-edit"><i class="bi bi-pencil-square" title="Edit Kiosk"></i></button>
+                                  <button class="btn btn-sm btn-success btn-save d-none">Save</button>
+                                  <button class="btn btn-sm btn-secondary btn-cancel d-none ms-1">Cancel</button>
+                                  <button class="btn btn-sm btn-danger btn-delete ms-1"><i class="bi bi-trash" title="Delete Kiosk"></i></button>
+
+                                </td>
+                              </tr>
+                            `;
+                        });
+
+                        $('#kioskTable tbody').html(text);
+
+                        if (dt) dt.destroy();
+
+                        dt = $('#kioskTable').DataTable({
+                            dom: 'Bfltip',
+                            responsive: true,
+                            buttons: [{
+                                    text: 'Add Kiosk',
+                                    className: 'add_kiosk',
+                                    attr: {
+                                        'data-bs-toggle': 'modal',
+                                        'data-bs-target': '#add_kiosk_modal'
+                                    }
+                                },
+                                {
+                                    extend: 'excel',
+                                    text: 'Excel',
+                                    exportOptions: {
+                                        columns: ':visible'
+                                    }
+                                },
+                                {
+                                    extend: 'pdf',
+                                    text: 'PDF',
+                                    exportOptions: {
+                                        columns: ':visible'
+                                    }
+                                },
+                                {
+                                    extend: 'print',
+                                    text: 'Print',
+                                    exportOptions: {
+                                        columns: ':visible'
+                                    }
+                                },
+                                {
+                                    extend: 'colvis',
+                                    text: 'Show/Hide Columns'
+                                }
+                            ],
+                            fixedHeader: true,
+                            paging: true,
+                            searching: true,
+                            ordering: true,
+                            scrollY: '300px',
+                            colReorder: true,
+                            scrollCollapse: true,
+                            language: {
+                                search: 'Search:'
+                            }
+                        });
+
+                        fixDT();
+                    });
+            }
+            // ---- END ADDED ----
+
+            // ---- CHANGED MINIMALLY: replace your initial fetch with reloadKiosks() call ----
+            reloadKiosks().catch(err => console.error(err));
+            // ---- END ----
+
+            $('#kioskTable tbody').on('click', '.btn-edit', function() {
+                const $tr = $(this).closest('tr');
+                $tr.find('td[data-field]').each(function() {
+                    const val = $(this).text().trim();
+                    $(this).attr('data-old', val);
+                    $(this).html(`<input class="form-control form-control-sm" value="${val}">`);
+                });
+                $tr.find('.btn-edit').addClass('d-none');
+                $tr.find('.btn-save, .btn-cancel').removeClass('d-none');
+                fixDT();
+
+            });
+
+            $('#kioskTable tbody').on('click', '.btn-cancel', function() {
+                const $tr = $(this).closest('tr');
+                $tr.find('td[data-field]').each(function() {
+                    $(this).text($(this).attr('data-old'));
+                });
+                $tr.find('.btn-edit').removeClass('d-none');
+                $tr.find('.btn-save, .btn-cancel').addClass('d-none');
+                fixDT();
+
+            });
+
+            $('#kioskTable tbody').on('click', '.btn-save', function() {
+                const $tr = $(this).closest('tr');
+                const id = $tr.data('id');
+
+                const payload = {
+                    id: id
+                };
+
+                $tr.find('td[data-field]').each(function() {
+                    const field = $(this).data('field');
+                    const value = $(this).find('input').val();
+                    payload[field] = value;
+                });
+
+                fetch('api/update_kiosk.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(payload)
+                    })
+                    .then(res => res.json())
+                    .then(resp => {
+                        if (!resp.success) throw new Error(resp.message || 'Update failed');
+
+                        $tr.find('td[data-field]').each(function() {
+                            const value = $(this).find('input').val();
+                            $(this).text(value);
+                        });
+
+
+                        $tr.find('.btn-edit').removeClass('d-none');
+                        $tr.find('.btn-save, .btn-cancel').addClass('d-none');
+                        fixDT();
+                        alert("Kiosk Updated Successfully");
+                        location.reload();
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        alert('Failed to update. Check console.');
+                    });
+            });
+            $('#kioskTable tbody').on('click', '.btn-delete', function() {
+                const $tr = $(this).closest('tr');
+                const id = $tr.data('id');
+
+                if (!confirm('Delete this kiosk?')) return;
+
+                fetch('api/delete_kiosk.php?id=' + encodeURIComponent(id))
+                    .then(res => res.json())
+                    .then(resp => {
+                        if (resp.success !== '1') {
+                            alert(resp.message || 'Delete failed');
+                            return;
+                        }
+                        alert('Kiosk deleted');
+                        location.reload();
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        alert('Delete failed. Check console.');
+                    });
+            });
+
+
+            function showAddErr(msg) {
+                $('#addKioskAlert').removeClass('d-none').text(msg);
+            }
+
+            function clearAddErr() {
+                $('#addKioskAlert').addClass('d-none').text('');
+            }
+
+            $('#btnAddKiosk').on('click', function() {
+                clearAddErr();
+
+                const username = $('#k_username').val().trim();
+                const password = $('#k_password').val().trim();
+                const name = $('#k_name').val().trim();
+                const address = $('#k_address').val().trim();
+
+                if (!username || !password || !name || !address) {
+                    showAddErr('Missing required fields');
+                    return;
+                }
+
+                const params = new URLSearchParams({
+                    username,
+                    password,
+                    name,
+                    address
+                });
+
+                fetch('api/insert_kiosk.php?' + params.toString())
+                    .then(res => res.json())
+                    .then(resp => {
+                        if (resp.success !== '1') {
+                            showAddErr(resp.message || 'Insert failed');
+                            return;
+                        }
+
+                        $('#k_username').val('');
+                        $('#k_password').val('');
+                        $('#k_name').val('');
+                  
+                        $('#k_address').val('');
+
+                        const modalEl = document.getElementById('add_kiosk_modal');
+                        const modal = bootstrap.Modal.getInstance(modalEl);
+                        if (modal) modal.hide();
+                        alert("Kiosk Inserted Successfully");
+                        location.reload();
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        showAddErr('Insert failed. Check console.');
+                    });
+            });
+          
+
         });
     </script>
 

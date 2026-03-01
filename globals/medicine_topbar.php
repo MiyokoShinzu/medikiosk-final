@@ -1,10 +1,10 @@
-<header class="topbar">
+<header class="topbar bg-success">
     <div class="top-left">
         <button id="toggleBtn" class="btn btn-light menu-btn" type="button" aria-label="Toggle sidebar">☰</button>
 
         <div class="top-titlewrap">
-            <div class="top-kicker">OVERVIEW</div>
-            <div class="top-title">Dashboard</div>
+            <div class="top-kicker"></div>
+            <div class="top-title text-white"><?= $kiosk_name; ?></div>
         </div>
     </div>
 
