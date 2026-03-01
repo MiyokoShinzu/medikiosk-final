@@ -1,4 +1,4 @@
-<header class="topbar bg-success">
+<header class="topbar bg-primary">
     <div class="top-left">
         <button id="toggleBtn" class="btn btn-light menu-btn" type="button" aria-label="Toggle sidebar">☰</button>
 
