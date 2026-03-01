@@ -9,10 +9,7 @@
     </div>
 
     <div class="top-right">
-        <div class="status-chip">
-            <span class="green-dot"></span>
-            <span class="status-label">Online</span>
-        </div>
+        
     </div>
 </header>
 <style>
