@@ -166,7 +166,6 @@ $kiosk_id = (int)($_SESSION['kiosk_id'] ?? 0);
                         <div class="col-12">
                             <label class="form-label fw-bold">Image (optional)</label>
                             <input name="image" type="file" class="form-control" accept="image/*">
-                            <div class="form-text">If you upload an image, it will be saved in <code>/uploads</code>.</div>
                         </div>
                     </div>
 
