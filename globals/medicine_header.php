@@ -197,4 +197,7 @@
         left: 5px;
         margin-top: -9px;
     }
+    table thead{
+        width: 100px;
+    }
 </style>
