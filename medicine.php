@@ -640,7 +640,7 @@ $kiosk_id = (int)($_SESSION['kiosk_id'] ?? 0);
 
                         dt = $('#medicineTable').DataTable({
                             dom: 'Bfltip',
-                            responsive: true,
+                            responsive: false,
                             buttons: [{
                                     text: 'Add Medicine',
                                     className: 'add_medicine btn btn-primary',
@@ -668,7 +668,7 @@ $kiosk_id = (int)($_SESSION['kiosk_id'] ?? 0);
                                     text: 'Show/Hide Columns'
                                 }
                             ],
-                            fixedHeader: true,
+                            fixedHeader: false,
                             paging: true,
                             searching: true,
                             ordering: true,
