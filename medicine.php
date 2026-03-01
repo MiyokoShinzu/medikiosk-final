@@ -75,15 +75,15 @@ $kiosk_id = (int)($_SESSION['kiosk_id'] ?? 0);
                             <table id="medicineTable" class="table table-striped table-bordered align-middle mb-0 w-100">
                                 <thead class="table-light">
                                     <tr class="text-center">
-                                        <th style="width:80px;">Image</th>
-                                        <th>Name</th>
-                                        <th>Brand</th>
-                                        <th>Category</th>
-                                        <th>Unit</th>
-                                        <th style="width:130px;">Availability</th>
-                                        <th style="width:140px;">Prescription</th>
-                                        <th>Notes</th>
-                                        <th style="width:160px;">Actions</th>
+                                        <th style="width:80px;" class="text-center">Image</th>
+                                        <th class="text-center">Name</th>
+                                        <th class="text-center">Brand</th>
+                                        <th class="text-center">Category</th>
+                                        <th class="text-center">Unit</th>
+                                        <th class="text-center" style="width:130px;">Availability</th>
+                                        <th class="text-center" style="width:140px;">Prescription</th>
+                                        <th class="text-center">Notes</th>
+                                        <th class="text-center" style="width:160px;">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
