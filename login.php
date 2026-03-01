@@ -80,7 +80,7 @@ if (isset($_GET["api"]) && $_GET["api"] === "login") {
                         $_SESSION["address"] = $row["address"] ?? "Unknown Kiosk";
 
                         $alertType = "success";
-                        $alert = "Login successful. Redirecting…". $row["access"];
+                        $alert = "Login successful. Redirecting…";
                         if($row['access']==3){
                             $redirectTo = "kiosk.php";
                         }
