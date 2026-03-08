@@ -7,7 +7,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
 require_once __DIR__ . '/../src/connection.php';
 
-// Get kiosk_id strictly from session
+
 $kiosk_id = (int)($_SESSION['kiosk_id'] ?? 0);
 
 if ($kiosk_id <= 0) {
@@ -44,7 +44,7 @@ $result = $stmt->get_result();
 $data = [];
 
 while ($row = $result->fetch_assoc()) {
-    // Ensure consistent types for JS
+
     $row['id'] = (string)$row['id'];
     $row['kiosk_id'] = (string)$row['kiosk_id'];
     $row['availability'] = (string)$row['availability']; // "1" or "0"

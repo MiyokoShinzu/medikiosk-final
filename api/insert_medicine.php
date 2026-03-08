@@ -128,7 +128,6 @@ if (!$stmt->execute()) {
     $errno = $stmt->errno;
     $err = $stmt->error;
 
-    // rollback uploaded image if any
     if ($imagePath) {
         @unlink(realpath(__DIR__ . '/../') . '/' . $imagePath);
     }
