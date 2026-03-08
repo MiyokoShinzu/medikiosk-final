@@ -185,6 +185,7 @@ if (isset($_GET["api"]) && $_GET["api"] === "login") {
                                     <button type="submit" class="btn btn-primary btn-lg w-100 login-btn">
                                         Sign in
                                     </button>
+                                    <a href="medicine_search.php" class="btn btn-outline-success  w-100 text-center mt-3">Search without logging in</a>
 
                                     <div class="text-center mt-3">
                                         <small class="text-muted">--------------------</small>
