@@ -88,7 +88,7 @@ if (isset($_GET["api"]) && $_GET["api"] === "login") {
                             $redirectTo = "dashboard.php";
                         }
                         else if($row['access']==0){
-                            $redirectTo = "admin.php";
+                            $redirectTo = "accounts.php";
                         }
                         else{
                             $redirectTo = "login.php";

@@ -1,23 +1,45 @@
 <?php
 include '../src/connection.php';
 
-if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+header('Content-Type: application/json');
 
-    $username = $_GET['username'];
-    $password = $_GET['password'];
-    $email    = $_GET['email'];
-    $access   = $_GET['access'];
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    $data = json_decode(file_get_contents("php://input"), true);
+
+    $username = $data['username'] ?? '';
+    $password = $data['password'] ?? '';
+    $email    = $data['email'] ?? '';
+    $access   = 3;
+
+    if ($username === '' || $password === '' || $email === '') {
+        echo json_encode([
+            "success" => false,
+            "message" => "Missing required fields"
+        ]);
+        exit;
+    }
+    if (!str_starts_with($username, 'P-')) {
+        echo json_encode([
+            "success" => false,
+            "message" => "Username must start with P-"
+        ]);
+        exit;
+    }
 
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-    $sql = "INSERT INTO accounts (username, password, email, access)
-            VALUES ('$username', '$hashedPassword', '$email', '$access')";
+    $stmt = $mysqli->prepare("INSERT INTO accounts (username, password, email, access) VALUES (?, ?, ?, ?)");
+    $stmt->bind_param("sssi", $username, $hashedPassword, $email, $access);
 
-    $result = $mysqli->query($sql);
-
-    if ($result) {
-        echo json_encode(['success' => '1']);
+    if ($stmt->execute()) {
+        echo json_encode([
+            "success" => true
+        ]);
     } else {
-        echo json_encode(['success' => '0']);
+        echo json_encode([
+            "success" => false,
+            "message" => "Insert failed"
+        ]);
     }
 }
