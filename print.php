@@ -58,9 +58,8 @@
             text += "\x1B\x61\x01Thank you!\n";
             text += "\x1D\x56\x41\x10"; // Cut
 
-           
-            const printUrl = "rawbt:" + encodeURIComponent(text);
-            window.open(printUrl, '_blank');
+            window.location.href = "rawbt:" + encodeURIComponent(text);
+
             // Optional: clear cart in main page
             setTimeout(() => {
                 localStorage.removeItem('cart');
