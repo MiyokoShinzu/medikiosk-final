@@ -38,7 +38,7 @@
             cart.forEach(item => {
                 const subtotal = item.price * item.qty;
                 total += subtotal;
-                text += item.name + "\n";
+                text += item.name + "("+item.brand+")" + "\n";
                 let left = `${item.qty} x ${item.price.toFixed(2)}`;
                 let right = subtotal.toFixed(2);
                 let space = 32 - (left.length + right.length);
