@@ -900,7 +900,7 @@ $kiosk_id = (int)($_SESSION['kiosk_id'] ?? 0);
                     <div>₱${(item.price * item.qty).toFixed(2)}</div>
 
                     <!-- Remove button -->
-                    <button onclick="removeFromCart(${item.id})" style="width: fit-content; background: var(--bs-secondary)s; color: #fff; border: none; padding: 4px 8px; border-radius: 4px;">
+                    <button onclick="removeFromCart(${item.id})" style="width: fit-content; background: var(--bs-secondary); color: #fff; border: none; padding: 4px 8px; border-radius: 4px;">
                         Remove
                     </button>
                 </div>
