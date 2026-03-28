@@ -881,19 +881,19 @@ $kiosk_id = (int)($_SESSION['kiosk_id'] ?? 0);
 
                 <!-- Item details -->
                 <div style="flex: 1; display: flex; flex-direction: column; gap: 6px;">
-                    <strong>${item.name}</strong>
-                    <smalls>${item.brand}</smalls>
+                    <strong>Name: ${item.name}</strong>
+                    <smalls>Brand: ${item.brand}</smalls>
 
                     <!-- Quantity controls -->
                     <div style="display: flex; align-items: center; gap: 4px;">
-                        <button onclick="updateQty(${item.id}, -1)" style="width: 30px;">-</button>
+                        <button onclick="updateQty(${item.id}, -1)" style="width: 30px;" class="btn btn-danger">-</button>
                         <input 
                             type="number" 
                             min="1" 
                             value="${item.qty}" 
                             onchange="setQty(${item.id}, this.value)" 
                             style="width: 50px; text-align: center;">
-                        <button onclick="updateQty(${item.id}, 1)" style="width: 30px;">+</button>
+                        <button onclick="updateQty(${item.id}, 1)" style="width: 30px;" class="btn btn-primary">+</button>
                     </div>
 
                     <!-- Total price -->
