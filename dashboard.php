@@ -887,7 +887,7 @@ $kiosk_id = (int)($_SESSION['kiosk_id'] ?? 0);
                     <!-- Quantity controls -->
                     <div style="display: flex; align-items: center; gap: 4px;">
                         <button onclick="updateQty(${item.id}, -1)" style="width: 30px;" class="btn btn-danger">-</button>
-                        <input 
+                        <input class="form-control"
                             type="number" 
                             min="1" 
                             value="${item.qty}" 
