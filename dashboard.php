@@ -892,7 +892,7 @@ $kiosk_id = (int)($_SESSION['kiosk_id'] ?? 0);
                             min="1" 
                             value="${item.qty}" 
                             onchange="setQty(${item.id}, this.value)" 
-                            style="width: 50px; text-align: center;">
+                            style="width: 100%; text-align: center;">
                         <button onclick="updateQty(${item.id}, 1)" style="width: 30px;" class="btn btn-primary">+</button>
                     </div>
 
