@@ -39,7 +39,7 @@
             cart.forEach(item => {
                 const subtotal = item.price * item.qty;
                 total += subtotal;
-                text += item.name + "("+item.brand+")" + "\n";
+                text += item.name + "(" + item.brand + ")" + "\n";
                 let left = `${item.qty} x ${item.price.toFixed(2)}`;
                 let right = subtotal.toFixed(2);
                 let space = 32 - (left.length + right.length);
@@ -58,8 +58,9 @@
             text += "\x1B\x61\x01Thank you!\n";
             text += "\x1D\x56\x41\x10"; // Cut
 
-            window.location.href = "rawbt:" + encodeURIComponent(text);
-
+           
+            const printUrl = "rawbt:" + encodeURIComponent(text);
+            window.open(printUrl, '_blank');
             // Optional: clear cart in main page
             setTimeout(() => {
                 localStorage.removeItem('cart');
@@ -68,12 +69,29 @@
         }
 
         window.onload = function() {
+
             printCart();
+            const docElm = document.documentElement;
+
+            // Attempting to go fullscreen immediately
+            if (docElm.requestFullscreen) {
+                docElm.requestFullscreen().catch(err => {
+                    console.log("Automatic fullscreen blocked. Awaiting user interaction.");
+
+                    // Fallback: If blocked, wait for the user to click anywhere on the print page
+                    document.addEventListener('click', () => {
+                        docElm.requestFullscreen();
+                    }, {
+                        once: true
+                    });
+                });
+            }
             localStorage.removeItem('cart');
             window.close();
-           // window.location.href = "dashboard.php"; // Redirect back to main page
+            // window.location.href = "dashboard.php"; // Redirect back to main page
         };
     </script>
+
 </body>
 
 </html>
