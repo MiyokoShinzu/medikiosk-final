@@ -763,7 +763,7 @@ $kiosk_id = (int)($_SESSION['kiosk_id'] ?? 0);
         loadMedicinesOnce();
         autoFullscreen();
     </script>
-    
+
     <script>
         const dateTimeEl = document.getElementById("dateTime");
 
@@ -850,7 +850,7 @@ $kiosk_id = (int)($_SESSION['kiosk_id'] ?? 0);
             renderCart();
         }
         window.clearCart = function() {
-           
+
             cart = [];
             saveCart();
             renderCart();
@@ -886,23 +886,24 @@ $kiosk_id = (int)($_SESSION['kiosk_id'] ?? 0);
 
                     <!-- Quantity controls -->
                     <div style="display: flex; align-items: center; gap: 4px;">
-                        <button onclick="updateQty(${item.id}, -1)" style="width: 30px;" class="btn btn-danger">-</button>
+                        <button onclick="updateQty(${item.id}, -1)" style="width: 30px;" class="btn btn-danger d-flex align-items-center justify-content-center">-</button>
                         <input class="form-control"
                             type="number" 
                             min="1" 
                             value="${item.qty}" 
                             onchange="setQty(${item.id}, this.value)" 
                             style="width: 100%; text-align: center;">
-                        <button onclick="updateQty(${item.id}, 1)" style="width: 30px;" class="btn btn-primary">+</button>
+                        <button onclick="updateQty(${item.id}, 1)" style="width: 30px;" class="btn btn-primary d-flex align-items-center justify-content-center bg-opacity-10s">+</button>
+                          <!-- Remove button -->
+                    <button onclick="removeFromCart(${item.id})" style="width: fit-content; border: 1px solid #454040; background: #FFF; color: #e61616; border: none; padding: 4px 8px; border-radius: 4px;">
+                        <i class="bi bi-trash"></i>
+                    </button>
                     </div>
 
                     <!-- Total price -->
                     <div>₱${(item.price * item.qty).toFixed(2)}</div>
 
-                    <!-- Remove button -->
-                    <button onclick="removeFromCart(${item.id})" style="width: fit-content; background: var(--bs-secondary); color: #fff; border: none; padding: 4px 8px; border-radius: 4px;">
-                        Remove
-                    </button>
+                  
                 </div>
             </div>
         `;
@@ -967,7 +968,7 @@ $kiosk_id = (int)($_SESSION['kiosk_id'] ?? 0);
 
         document.getElementById('print_btn').addEventListener('click', () => {
             closeCart();
-            
+
             const cart = JSON.parse(localStorage.getItem('cart') || '[]');
             const cartParam = encodeURIComponent(JSON.stringify(cart));
             localStorage.removeItem('cart'); // Clear cart after sending to print
