@@ -718,50 +718,10 @@ $kiosk_id = (int)($_SESSION['kiosk_id'] ?? 0);
             applyFilters();
         });
 
-        function autoFullscreen() {
-            if (document.fullscreenElement) return;
-
-            const tryEnter = async () => {
-                try {
-                    await document.documentElement.requestFullscreen();
-                } catch (e) {}
-            };
-
-            tryEnter();
-
-            if (!document.fullscreenElement) {
-                const overlay = document.createElement("div");
-                overlay.style.position = "fixed";
-                overlay.style.inset = "0";
-                overlay.style.zIndex = "9999";
-                overlay.style.background = "rgba(13, 110, 253, 0.95)";
-                overlay.style.display = "flex";
-                overlay.style.alignItems = "center";
-                overlay.style.justifyContent = "center";
-                overlay.style.padding = "24px";
-                overlay.style.color = "#fff";
-                overlay.style.textAlign = "center";
-                overlay.innerHTML = `
-                    <div style="max-width:520px">
-                        <div style="font-weight:900;font-size:32px;letter-spacing:-0.02em;margin-bottom:10px">MediKiosk</div>
-                        <div style="font-size:18px;opacity:0.92;margin-bottom:18px">Tap to enter fullscreen kiosk mode</div>
-                        <button type="button" class="btn btn-light btn-lg" id="enterFsBtn" style="border-radius:16px;font-weight:900;padding:12px 24px">
-                            Enter Fullscreen
-                        </button>
-                        <div style="margin-top:14px;opacity:0.8;font-size:13px">Fullscreen is required for kiosk mode.</div>
-                    </div>
-                `;
-                document.body.appendChild(overlay);
-
-                overlay.querySelector("#enterFsBtn").addEventListener("click", async () => {
-                    await tryEnter();
-                    if (document.fullscreenElement) overlay.remove();
-                });
-            }
-        }
+        
 
         loadMedicinesOnce();
-        autoFullscreen();
+    
     </script>
 
     <script>
