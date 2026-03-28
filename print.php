@@ -52,7 +52,7 @@
             let totalValue = total.toFixed(2);
             let space = 32 - (totalLabel.length + totalValue.length);
             if (space < 1) space = 1;
-            text += "PhP"+totalLabel + " ".repeat(space) + totalValue + "\n";
+            text += totalLabel + " ".repeat(space) + totalValue + "\n";
             text += "------------------------------\n";
             text += "\x1B\x61\x01Show order to the counter.\n";
             text += "\x1B\x61\x01Thank you!\n";
