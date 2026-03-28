@@ -16,9 +16,7 @@ function respond($success, $message = '', $extra = [])
 function uuidv4(): string
 {
     $data = random_bytes(16);
-    // set version to 0100
     $data[6] = chr((ord($data[6]) & 0x0f) | 0x40);
-    // set bits 6-7 to 10
     $data[8] = chr((ord($data[8]) & 0x3f) | 0x80);
 
     $hex = bin2hex($data);
@@ -37,7 +35,6 @@ if ($kiosk_id <= 0) {
     respond(false, 'Invalid kiosk session. Please open the kiosk page again.');
 }
 
-/* Read fields */
 $name         = trim($_POST['name'] ?? '');
 $brand        = trim($_POST['brand'] ?? '');
 $category     = trim($_POST['category'] ?? '');
@@ -45,14 +42,13 @@ $unit         = trim($_POST['unit'] ?? '');
 $availability = isset($_POST['availability']) ? (int)$_POST['availability'] : 0;
 $prescription = trim($_POST['prescription'] ?? 'No');
 $notes        = trim($_POST['notes'] ?? '');
+$price        = isset($_POST['price']) ? (float)$_POST['price'] : 0;
 
-/* Validate */
 if ($name === '') respond(false, 'Name is required.');
 if (!in_array($availability, [0, 1], true)) $availability = 0;
 if ($prescription !== 'Yes' && $prescription !== 'No') $prescription = 'No';
 
-/* Optional image upload */
-$imagePath = null; // this is what we store in DB (e.g. uploads/uuid.jpg)
+$imagePath = null;
 
 if (isset($_FILES['image']) && $_FILES['image']['error'] !== UPLOAD_ERR_NO_FILE) {
 
@@ -69,14 +65,12 @@ if (isset($_FILES['image']) && $_FILES['image']['error'] !== UPLOAD_ERR_NO_FILE)
         respond(false, 'Invalid image type. Allowed: jpg, jpeg, png, webp, gif.');
     }
 
-    // Optional size limit (5MB)
     $maxBytes = 5 * 1024 * 1024;
     if (!empty($_FILES['image']['size']) && $_FILES['image']['size'] > $maxBytes) {
         respond(false, 'Image too large. Max 5MB.');
     }
 
-    // Ensure uploads folder exists
-    $projectRoot = realpath(__DIR__ . '/../');  // one level above /api
+    $projectRoot = realpath(__DIR__ . '/../');
     $uploadDir = $projectRoot . '/uploads';
     if (!is_dir($uploadDir)) {
         if (!mkdir($uploadDir, 0775, true)) {
@@ -87,7 +81,6 @@ if (isset($_FILES['image']) && $_FILES['image']['error'] !== UPLOAD_ERR_NO_FILE)
     $uuid = uuidv4();
     $fileName = $uuid . '.' . $ext;
 
-    // store relative path in DB
     $imagePath = 'uploads/' . $fileName;
 
     $destPath = $uploadDir . '/' . $fileName;
@@ -97,14 +90,12 @@ if (isset($_FILES['image']) && $_FILES['image']['error'] !== UPLOAD_ERR_NO_FILE)
     }
 }
 
-/* Insert */
 $sql = "INSERT INTO medicines
-        (kiosk_id, name, brand, category, unit, availability, prescription, notes, image)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        (kiosk_id, name, brand, category, unit, availability, prescription, notes, image, price)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 $stmt = $mysqli->prepare($sql);
 if (!$stmt) {
-    // rollback uploaded image if any
     if ($imagePath) {
         @unlink(realpath(__DIR__ . '/../') . '/' . $imagePath);
     }
@@ -112,7 +103,7 @@ if (!$stmt) {
 }
 
 $stmt->bind_param(
-    "issssisss",
+    "issssisssd",
     $kiosk_id,
     $name,
     $brand,
@@ -121,7 +112,8 @@ $stmt->bind_param(
     $availability,
     $prescription,
     $notes,
-    $imagePath
+    $imagePath,
+    $price
 );
 
 if (!$stmt->execute()) {

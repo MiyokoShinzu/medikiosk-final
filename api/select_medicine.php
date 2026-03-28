@@ -21,6 +21,7 @@ $sql = "SELECT
             name,
             brand,
             category,
+            price,
             unit,
             availability,
             prescription,
@@ -50,9 +51,12 @@ while ($row = $result->fetch_assoc()) {
     $row['availability'] = (string)$row['availability']; // "1" or "0"
     $row['prescription'] = $row['prescription'] ?? "No";
     $row['notes'] = $row['notes'] ?? "";
+    $row['brand'] = $row['brand'] ?? "";
+    $row['price'] = (float)$row['price'];
     $row['image'] = $row['image'] ?? "";
 
     $data[] = $row;
+    
 }
 
 $stmt->close();

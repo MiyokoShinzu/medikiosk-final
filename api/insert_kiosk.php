@@ -30,8 +30,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         exit;
     }
 
-    $sql = "INSERT INTO kiosk_table (username, password, name, account_id, address)
-            VALUES ('$username', '$hashedPassword', '$name', '$account_id', '$address')";
+    $sql = "INSERT INTO kiosk_table (username, password, name, account_id, address,access)
+            VALUES ('$username', '$hashedPassword', '$name', '$account_id', '$address', 2)";
 
     $result = $mysqli->query($sql);
 

@@ -10,6 +10,7 @@ $sql = "
         m.name AS m_name,
         m.image AS file_path,
         m.brand AS m_brand,
+        m.price AS m_price,
         m.prescription AS m_prescription,
         k.name AS k_name,
         k.address AS k_address,

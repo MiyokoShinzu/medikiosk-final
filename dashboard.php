@@ -158,6 +158,10 @@ $kiosk_id = (int)($_SESSION['kiosk_id'] ?? 0);
                                         <div id="infoBrand" class="fw-bold"></div>
                                     </div>
                                     <div class="col-6">
+                                        <div class="text-muted small fw-semibold">Price</div>
+                                        <div id="infoPrice" class="fw-bold"></div>
+                                    </div>
+                                    <div class="col-6">
                                         <div class="text-muted small fw-semibold">Category</div>
                                         <div id="infoCat" class="fw-bold"></div>
                                     </div>
@@ -199,7 +203,26 @@ $kiosk_id = (int)($_SESSION['kiosk_id'] ?? 0);
             </div>
         </div>
     </div>
+    <!-- cart -->
+    <!-- CART SIDEBAR -->
+    <div id="cartSidebar" class="cart-sidebar">
+        <div class="cart-header">
+            <h5>Cart</h5>
+            <button id="closeCart" class="btn-close"></button>
+        </div>
 
+        <div id="cartItems" class="cart-body"></div>
+
+        <div class="cart-footer">
+            <h6>Total: ₱<span id="cartTotal">0.00</span></h6>
+            <button id="print_btn" class="btn btn-success mb-2 w-100">Print Order</button>
+            <button onclick="clearCart()" class="btn btn-outline-danger w-100 mb-2">
+                Clear Cart
+            </button>
+        </div>
+    </div>
+
+    <div id="cartOverlay" class="cart-overlay d-none"></div>
 
     <?php include 'globals/scripts.php'; ?>
 
@@ -495,14 +518,10 @@ $kiosk_id = (int)($_SESSION['kiosk_id'] ?? 0);
 
         const infoModal = (window.bootstrap && bootstrap.Modal) ? new bootstrap.Modal(infoModalEl) : null;
 
-        let meds = []; // will come from database (once)
+        let meds = [];
 
-        /**
-         * Loads medicines ONCE from DB, filtered by session kiosk_id.
-         * API should query using $_SESSION['kiosk_id'] (recommended).
-         */
         function loadMedicinesOnce() {
-            // optional: pass kiosk_id also (safe fallback)
+
             const url = "api/select_medicine.php";
 
             return fetch(url, {
@@ -510,21 +529,21 @@ $kiosk_id = (int)($_SESSION['kiosk_id'] ?? 0);
                 })
                 .then(res => res.json())
                 .then(rows => {
-                    // rows expected like:
-                    // [{id,kiosk_id,name,brand,category,unit,availability(0/1),prescription(Yes/No),notes,image}, ...]
+
                     meds = (Array.isArray(rows) ? rows : []).map(r => ({
                         id: Number(r.id),
                         name: r.name || "",
                         brand: r.brand || "",
                         category: r.category || "",
                         unit: r.unit || "",
-                        available: String(r.availability) === "1", // 1/0 -> boolean
+                        available: String(r.availability) === "1",
                         prescription: String(r.prescription).toLowerCase() === "yes", // Yes/No -> boolean
                         notes: r.notes || "",
-                        img: r.image || "" // should already be a path like "uploads/uuid.jpg" OR full URL
+                        price: Number(r.price) || 0,
+                        img: r.image || ""
                     }));
 
-                    // render using your existing system
+
                     applyFilters();
                 })
                 .catch(err => {
@@ -573,6 +592,7 @@ $kiosk_id = (int)($_SESSION['kiosk_id'] ?? 0);
             infoCat.textContent = m.category;
             infoUnit.textContent = m.unit;
             infoAvail.textContent = m.available ? "Available" : "Not available";
+            infoPrice.textContent = `${m.price.toFixed(2)}`;
             infoPrescription.textContent = prescriptionText(m.prescription);
             infoNotes.textContent = m.notes || "-";
             if (infoModal) infoModal.show();
@@ -596,15 +616,29 @@ $kiosk_id = (int)($_SESSION['kiosk_id'] ?? 0);
             list.forEach((m, idx) => {
                 const aText = m.available ? "Available" : "Not available";
                 const aCls = m.available ? "pill pill-available" : "pill pill-unavailable";
-
+                const aPrice = `Php${m.price.toFixed(2)}`;
                 const pText = m.prescription ? "Prescription required" : "No prescription";
                 const pCls = m.prescription ? "pill pill-prescription" : "pill pill-no-prescription";
-
+                const price_ls = "pill bg-primary bolder bg-opacity-10 border-success text-success";
                 const imgUrl = safeImg(m.img, idx);
-
+                const brand = m.brand;
+                console.log(m)
                 const col = document.createElement("div");
                 col.className = "col-12 col-sm-6 col-lg-4";
 
+                if (aText == "Available") {
+                    button = `<button onclick="addToCart({
+    id: ${m.id},
+    name: '${m.name}',
+    price: ${m.price},
+    brand: '${m.brand}',
+    imgUrl: '${imgUrl.replace(/'/g, "\\'")}'
+})" class="btn btn-primary bg-opacity-10 text-white btn-sm rounded-4 p-2 w-75">
+    Add to Cart
+</button>`
+                } else {
+                    button = `  `
+                }
                 col.innerHTML = `
                     <div class="med-card position-relative">
                         <div class="med-img-wrap">
@@ -615,14 +649,19 @@ $kiosk_id = (int)($_SESSION['kiosk_id'] ?? 0);
                             <div class="med-meta">${m.brand || "Generic"} • ${m.category} • ${m.unit}</div>
 
                             <div class="d-flex w-100 flex-wrap gap-2 align-items-end mb-2">
+                                <span class="${price_ls}">${aPrice}</span>
+                            
                                 <span class="${aCls}">${aText}</span>
                                 <span class="${pCls}">${pText}</span>
-                                <button type="button" class="btn btn-primary position-absolute bottom-5 me-2 btn-sm pill-info-btn info-btn"
+                                <button type="button" class="btn btn-secondary position-absolute me-2 btn-sm pill-info-btn info-btn"
                                     data-id="${m.id}"
                                     style="right: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.12);"
                                     aria-label="More info" title="More info">
                                     <i class="bi bi-info text-white fw-4"></i>
                                 </button>
+                                <br>
+                                
+                                ${button}
                             </div>
                         </div>
                     </div>
@@ -721,9 +760,10 @@ $kiosk_id = (int)($_SESSION['kiosk_id'] ?? 0);
             }
         }
 
-        loadMedicinesOnce(); // load from DB once, then calls applyFilters()
+        loadMedicinesOnce();
         autoFullscreen();
     </script>
+    
     <script>
         const dateTimeEl = document.getElementById("dateTime");
 
@@ -752,6 +792,207 @@ $kiosk_id = (int)($_SESSION['kiosk_id'] ?? 0);
 
         tickDateTime();
         setInterval(tickDateTime, 1000);
+    </script>
+
+
+
+    <script>
+        let cart = [];
+
+        // Load from localStorage
+        function loadCart() {
+            const saved = localStorage.getItem('cart');
+            if (saved) cart = JSON.parse(saved);
+            renderCart();
+        }
+
+        // Save to localStorage
+        function saveCart() {
+            localStorage.setItem('cart', JSON.stringify(cart));
+        }
+
+        // Add to cart
+        function addToCart(item) {
+            const existing = cart.find(i => i.id === item.id);
+
+            if (existing) {
+                existing.qty += 1;
+            } else {
+                cart.push({
+                    ...item,
+                    qty: 1
+                });
+            }
+            showToast("<i class='bi bi-check-circle-fill'></i> Added to cart");
+            // $('#cartSidebar').addClass('open');
+            // $('#cartOverlay').removeClass('d-none');
+            saveCart();
+            renderCart();
+        }
+
+        // Remove item
+        function removeFromCart(id) {
+            cart = cart.filter(i => i.id !== id);
+            saveCart();
+            renderCart();
+        }
+        window.updateQty = function(id, change) {
+            const item = cart.find(i => i.id === id);
+            if (!item) return;
+
+            item.qty += change;
+
+            if (item.qty <= 0) {
+                cart = cart.filter(i => i.id !== id);
+            }
+
+            saveCart();
+            renderCart();
+        }
+        window.clearCart = function() {
+           
+            cart = [];
+            saveCart();
+            renderCart();
+        }
+        // Render cart
+        function renderCart() {
+            let html = "";
+            let total = 0;
+            let count = 0;
+
+            cart.forEach(item => {
+                total += item.price * item.qty;
+                count += item.qty;
+
+                html += `
+            <div style="
+                display: flex;
+                flex-direction: row; /* image on the left, details on the right */
+                align-items: center;
+                border: 1px solid #ccc;
+                border-radius: 8px;
+                padding: 10px;
+                gap: 12px;
+                background: #fff;
+            ">
+                <!-- Item image -->
+                <img src="${item.imgUrl}" alt="${item.name}" style="width: 100px; height: 100px; object-fit: cover; border-radius: 4px;">
+
+                <!-- Item details -->
+                <div style="flex: 1; display: flex; flex-direction: column; gap: 6px;">
+                    <strong>${item.name}</strong>
+                    <smalls>${item.brand}</smalls>
+
+                    <!-- Quantity controls -->
+                    <div style="display: flex; align-items: center; gap: 4px;">
+                        <button onclick="updateQty(${item.id}, -1)" style="width: 30px;">-</button>
+                        <input 
+                            type="number" 
+                            min="1" 
+                            value="${item.qty}" 
+                            onchange="setQty(${item.id}, this.value)" 
+                            style="width: 50px; text-align: center;">
+                        <button onclick="updateQty(${item.id}, 1)" style="width: 30px;">+</button>
+                    </div>
+
+                    <!-- Total price -->
+                    <div>₱${(item.price * item.qty).toFixed(2)}</div>
+
+                    <!-- Remove button -->
+                    <button onclick="removeFromCart(${item.id})" style="width: fit-content; background: #dc3545; color: #fff; border: none; padding: 4px 8px; border-radius: 4px;">
+                        Remove
+                    </button>
+                </div>
+            </div>
+        `;
+            });
+
+            // Vertical container
+            const container = document.getElementById('cartItems');
+            container.innerHTML = html || "<p>No items</p>";
+            container.style.display = "flex";
+            container.style.flexDirection = "column"; // vertical stack
+            container.style.gap = "12px";
+            container.style.padding = "8px";
+
+            document.getElementById('cartTotal').innerText = total.toFixed(2);
+            document.getElementById('cartCount').innerText = count;
+        }
+
+        // Helper for typing quantity directly
+        function setQty(id, value) {
+            const qty = parseInt(value);
+            if (!isNaN(qty) && qty > 0) {
+                const item = cart.find(i => i.id === id);
+                if (item) {
+                    item.qty = qty;
+                    renderCart();
+                }
+            }
+        }
+
+        // Sidebar controls
+        document.getElementById('openCart').onclick = () => {
+            document.getElementById('cartSidebar').classList.add('open');
+            document.getElementById('cartOverlay').classList.remove('d-none');
+        };
+
+        document.getElementById('closeCart').onclick = closeCart;
+        document.getElementById('cartOverlay').onclick = closeCart;
+
+        function closeCart() {
+            document.getElementById('cartSidebar').classList.remove('open');
+            document.getElementById('cartOverlay').classList.add('d-none');
+        }
+
+        function showToast(msg) {
+            const toast = $(`
+        <div class="toast align-items-center text-bg-success border-0 position-fixed bottom-0 start-0 m-3">
+            <div class="d-flex">
+                <div class="toast-body">${msg}</div>
+            </div>
+        </div>
+    `);
+
+            $('body').append(toast);
+            new bootstrap.Toast(toast[0]).show();
+
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        // Init
+        loadCart();
+
+
+        document.getElementById('print_btn').addEventListener('click', () => {
+            closeCart();
+            
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            const cartParam = encodeURIComponent(JSON.stringify(cart));
+            localStorage.removeItem('cart'); // Clear cart after sending to print
+            saveCart();
+            renderCart();
+            if (!cart.length) return alert("Cart is empty!");
+            clearCart();
+            // Send cart data as URL-encoded JSON
+
+
+
+
+            setTimeout(() => {
+                window.open(`print.php?cart=${cartParam}`, '_blank');
+            }, 1000);
+
+
+        });
+    </script>
+
+
+
+
+    <script>
+
     </script>
 
 

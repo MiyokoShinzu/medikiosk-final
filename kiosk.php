@@ -19,12 +19,11 @@
                     <div class="col-12 col-md-12">
                         <div class="stat-card">
                             <div class="stat-label">Total Kiosks</div>
-                            <div class="stat-value"><?php include "src/connection.php"
-                                ;
-                                $result = $mysqli->query("SELECT COUNT(*) AS count FROM kiosk_table where account_id = $_SESSION[user_id]");
-                                $row = $result->fetch_assoc();
-                                echo $row['count'];
-                            ?></div>
+                            <div class="stat-value"><?php include "src/connection.php";
+                                                    $result = $mysqli->query("SELECT COUNT(*) AS count FROM kiosk_table where account_id = $_SESSION[user_id]");
+                                                    $row = $result->fetch_assoc();
+                                                    echo $row['count'];
+                                                    ?></div>
                             <div class="stat-sub">Registered kiosks</div>
                         </div>
                     </div>
@@ -89,7 +88,7 @@
                         <input id="k_name" class="form-control" placeholder="Kiosk Name">
                     </div>
 
-                  
+
 
                     <div class="mb-3">
                         <label class="form-label">Address</label>
@@ -105,6 +104,8 @@
             </div>
         </div>
     </div>
+
+    
 
     <?php include 'globals/scripts.php'; ?>
 
@@ -705,7 +706,7 @@
                         $('#k_username').val('');
                         $('#k_password').val('');
                         $('#k_name').val('');
-                  
+
                         $('#k_address').val('');
 
                         const modalEl = document.getElementById('add_kiosk_modal');
@@ -719,7 +720,7 @@
                         showAddErr('Insert failed. Check console.');
                     });
             });
-          
+
 
         });
     </script>

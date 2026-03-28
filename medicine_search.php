@@ -224,7 +224,7 @@ $totalMedicines = $countRow['count'] ?? 0;
             </div>
         </div>
 
-        
+
     </header>
 
     <style>
@@ -406,8 +406,8 @@ $totalMedicines = $countRow['count'] ?? 0;
             data.forEach(item => {
                 const badge =
                     item.m_prescription === "Yes" ?
-                    `<span class="badge-soft badge-rx">Prescription Required</span>` :
-                    `<span class="badge-soft badge-otc">No Prescription</span>`;
+                    `<span class="badge-soft   text-center badge-rx">Prescription Required</span>` :
+                    `<span class="badge-soft text-center badge-otc">No Prescription Required</span>`;
 
                 const imagePart =
                     item.file_path && item.file_path.trim() !== '' ?
@@ -421,23 +421,34 @@ $totalMedicines = $countRow['count'] ?? 0;
                                 ${imagePart}
                             </div>
 
-                            <div class="medicine-body">
-                                <div class="medicine-name">${escapeHtml(item.m_name)}</div>
+                            <div class="medicine-body row">
+                                <div class="col-12 border-bottom border-dark mb-2">
+                                  <div class="medicine-name">${escapeHtml(item.m_name)}</div>
+                                 
+                                </div>
+                               
 
-                                <div class="meta-label">Brand</div>
+                                <div class="col-lg-6">
+                                    <div class="meta-label">Brand</div>
                                 <div class="meta-value">${escapeHtml(item.m_brand)}</div>
+                                </div>
 
-                                <div class="meta-label">Prescription</div>
-                                <div class="meta-value">${badge}</div>
+                                <div class="col-lg-6">
+                                    <div class="meta-label">Price</div>
+                                    <div class="meta-value">Php${item.m_price.toFixed(2)}</div>
+                                </div>
+                                
+                                <div class="col-lg-6">
+                                  <div class="meta-label">Kiosk Name</div>
+                                    <div class="meta-value">${escapeHtml(item.k_name)}</div>
+                                </div>
 
-                                <div class="meta-label">Kiosk Name</div>
-                                <div class="meta-value">${escapeHtml(item.k_name)}</div>
-
-                                <div class="meta-label">Kiosk Address</div>
-                                <div class="meta-value">${escapeHtml(item.k_address)}</div>
-
-                                <div class="meta-label">Pharmacy Username</div>
-                                <div class="meta-value mb-0">${escapeHtml(item.u_name)}</div>
+                                <div class="col-lg-6">
+                                    <div class="meta-label">Kiosk Address</div>
+                                    <div class="meta-value">${escapeHtml(item.k_address)}</div>
+                                </div>
+                                 ${badge}
+                                  <p class="pb-1"></p>
                             </div>
                         </div>
                     </div>

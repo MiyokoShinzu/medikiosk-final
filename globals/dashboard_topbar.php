@@ -30,7 +30,13 @@
             <i class="bi bi-arrow-left-circle me-1"></i> Logout
         </a>
 
-    </div>
+    </div> <button id="openCart" class="btn btn-primary position-relative">
+        <i class="bi bi-cart"></i>
+        <span id="cartCount" class="badge bg-danger position-absolute top-0 start-100 translate-middle">
+            0
+        </span>
+    </button>
+
 
 </header>
 <style>

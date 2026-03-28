@@ -14,6 +14,7 @@
             <span class="status-label">Online</span>
         </div>
     </div>
+   
 </header>
 <style>
     .topbar {

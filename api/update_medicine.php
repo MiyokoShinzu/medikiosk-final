@@ -12,6 +12,7 @@ if ($id <= 0) {
 
 $name = $mysqli->real_escape_string($input['name'] ?? '');
 $brand = $mysqli->real_escape_string($input['brand'] ?? '');
+$price = isset($input['price']) ? (float)$input['price'] : 0;
 $category = $mysqli->real_escape_string($input['category'] ?? '');
 $unit = $mysqli->real_escape_string($input['unit'] ?? '');
 $availability = isset($input['availability']) ? (int)$input['availability'] : 0;
@@ -27,7 +28,8 @@ $sql = "UPDATE medicines SET
             unit='$unit',
             availability=$availability,
             prescription='$prescription',
-            notes='$notes'
+            notes='$notes',
+            price=$price
         WHERE id=$id";
 
 if ($mysqli->query($sql)) {

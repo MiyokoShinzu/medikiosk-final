@@ -78,6 +78,7 @@ $kiosk_id = (int)($_SESSION['kiosk_id'] ?? 0);
                                         <th style="width:80px;" class="text-center">Image</th>
                                         <th class="text-center">Name</th>
                                         <th class="text-center">Brand</th>
+                                        <th class="text-center">Price</th>
                                         <th class="text-center">Category</th>
                                         <th class="text-center">Unit</th>
                                         <th class="text-center" style="width:130px;">Availability</th>
@@ -116,10 +117,14 @@ $kiosk_id = (int)($_SESSION['kiosk_id'] ?? 0);
                             <label class="form-label fw-bold">Name *</label>
                             <input name="name" class="form-control" required>
                         </div>
-
+                        
                         <div class="col-md-6">
                             <label class="form-label fw-bold">Brand</label>
                             <input name="brand" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Price *</label>
+                            <input name="price" type="number" class="form-control" step="0.01" required>
                         </div>
 
                         <div class="col-md-6">
@@ -199,6 +204,7 @@ $kiosk_id = (int)($_SESSION['kiosk_id'] ?? 0);
                         <div class="col-md-8">
                             <div class="mb-2"><strong>Name:</strong> <span id="vm_name"></span></div>
                             <div class="mb-2"><strong>Brand:</strong> <span id="vm_brand"></span></div>
+                            <div class="mb-2"><strong>Price:</strong> <span id="vm_price"></span></div>
                             <div class="mb-2"><strong>Category:</strong> <span id="vm_category"></span></div>
                             <div class="mb-2"><strong>Unit:</strong> <span id="vm_unit"></span></div>
                             <div class="mb-2"><strong>Availability:</strong> <span id="vm_availability"></span></div>
@@ -598,6 +604,7 @@ $kiosk_id = (int)($_SESSION['kiosk_id'] ?? 0);
       data-img="${imgSrc}"
       data-name="${(item.name ?? '').replace(/"/g,'&quot;')}"
       data-brand="${(item.brand ?? '').replace(/"/g,'&quot;')}"
+      data-price="${(item.price ?? '').replace(/"/g,'&quot;')}"
       data-category="${(item.category ?? '').replace(/"/g,'&quot;')}"
       data-unit="${(item.unit ?? '').replace(/"/g,'&quot;')}"
       data-availability="${item.availability ?? 0}"
@@ -608,6 +615,7 @@ $kiosk_id = (int)($_SESSION['kiosk_id'] ?? 0);
 
   <td class="text-center" data-field="name">${item.name ?? ""}</td>
   <td class="text-center" data-field="brand">${item.brand ?? ""}</td>
+  <td class="text-center" data-field="price">${item.price ?? ""}</td>
   <td class="text-center" data-field="category">${item.category ?? ""}</td>
   <td class="text-center" data-field="unit">${item.unit ?? ""}</td>
 
@@ -758,6 +766,12 @@ $kiosk_id = (int)($_SESSION['kiosk_id'] ?? 0);
                         $(this).html(`<textarea class="form-control form-control-sm" rows="2">${val}</textarea>`);
                         return;
                     }
+                    if (field === 'price') {
+                        const val = $(this).text().trim();
+                        $(this).attr('data-old', val);
+                        $(this).html(`<input type="number" step="0.01" class="form-control form-control-sm" value="${val}">`);
+                        return;
+                    }
 
                     if (field === 'category') {
                         const oldVal = ($(this).text().trim() || "");
@@ -808,6 +822,21 @@ $kiosk_id = (int)($_SESSION['kiosk_id'] ?? 0);
                         $(this).text(oldVal);
                         return;
                     }
+                    if (field === 'notes') {
+                        const oldVal = $(this).attr('data-old') ?? "";
+                        $(this).text(oldVal);
+                        return;
+                    }
+                     if (field === 'price') {
+                        const oldVal = $(this).attr('data-old') ?? "";
+                        $(this).text(oldVal);
+                        return;
+                    }
+                     if (field === 'category') {
+                        const oldVal = $(this).attr('data-old') ?? "";
+                        $(this).text(oldVal);
+                        return;
+                    }
 
                     $(this).text($(this).attr('data-old') ?? "");
                 });
@@ -834,6 +863,7 @@ $kiosk_id = (int)($_SESSION['kiosk_id'] ?? 0);
                     else if (field === 'prescription') payload[field] = $(this).find('select').val();
                     else if (field === 'category') payload[field] = $(this).find('select').val();
                     else if (field === 'notes') payload[field] = $(this).find('textarea').val();
+                        else if (field === 'price') payload[field] = $(this).find('input').val();
                     else payload[field] = $(this).find('input').val();
                 });
 
@@ -862,7 +892,14 @@ $kiosk_id = (int)($_SESSION['kiosk_id'] ?? 0);
                                 const v = payload.prescription ?? "No";
                                 $(this).attr('data-value', v);
                                 $(this).text(v);
-                            } else {
+                            } else if (field === 'notes') {
+                                $(this).text(payload.notes ?? "");
+                            } else if (field === 'category') {
+                                $(this).text(payload.category ?? "");
+                            } else if (field === 'price') {
+                                $(this).text(payload.price ?? "");
+                            } 
+                            else {
                                 $(this).text(payload[field] ?? "");
                             }
                         });
@@ -913,6 +950,9 @@ $kiosk_id = (int)($_SESSION['kiosk_id'] ?? 0);
                 const availability = String(img.data('availability') ?? "0");
                 const prescription = img.data('prescription') || "No";
                 const notes = img.data('notes') || "";
+                const price = img.data('price') || "";
+
+                 $('#vm_price').text(price ? `$${price}` : "N/A");
 
                 $('#vm_image').attr('src', imgSrc);
                 $('#vm_name').text(name);
