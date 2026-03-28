@@ -38,10 +38,10 @@
             let total = 0;
             cart.forEach(item => {
                 const subtotal = item.price * item.qty;
-                total += "PhP " + subtotal;
+                total += subtotal;
                 text += item.name + "("+item.brand+")" + "\n";
                 let left = `${item.qty} x ${item.price.toFixed(2)}`;
-                let right = "PhP " + subtotal.toFixed(2);
+                let right = subtotal.toFixed(2);
                 let space = 32 - (left.length + right.length);
                 if (space < 1) space = 1;
                 text += left + " ".repeat(space) + right + "\n";
@@ -49,7 +49,7 @@
 
             text += "------------------------------\n";
             let totalLabel = "TOTAL";
-            let totalValue = "PhP " + total.toFixed(2);
+            let totalValue = total.toFixed(2);
             let space = 32 - (totalLabel.length + totalValue.length);
             if (space < 1) space = 1;
             text += totalLabel + " ".repeat(space) + totalValue + "\n";
