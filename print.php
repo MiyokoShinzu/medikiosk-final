@@ -31,6 +31,7 @@
             let text = "\x1B\x40"; // Initialize
             text += "\x1B\x61\x01\x1B\x45\x01MediKiosk\x1B\x45\x00\n";
             text += new Date().toLocaleString() + "\n";
+            text += "List of Ordered Items" + "\n";
             text += "------------------------------\n";
             text += "\x1B\x61\x00";
 
@@ -53,8 +54,8 @@
             if (space < 1) space = 1;
             text += totalLabel + " ".repeat(space) + totalValue + "\n";
             text += "------------------------------\n";
+            text += "\x1B\x61\x01Show order to the counter.\n";
             text += "\x1B\x61\x01Thank you!\n";
-            text += "\x1B\x61\x01Show order to the counter.\n\n";
             text += "\x1D\x56\x41\x10"; // Cut
 
             window.location.href = "rawbt:" + encodeURIComponent(text);
