@@ -53,7 +53,8 @@
             if (space < 1) space = 1;
             text += totalLabel + " ".repeat(space) + totalValue + "\n";
             text += "------------------------------\n";
-            text += "\x1B\x61\x01Thank you!\n\n";
+            text += "\x1B\x61\x01Thank you!\n";
+            text += "\x1B\x61\x01Show order to the counter.\n\n";
             text += "\x1D\x56\x41\x10"; // Cut
 
             window.location.href = "rawbt:" + encodeURIComponent(text);
