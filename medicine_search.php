@@ -428,22 +428,19 @@ $totalMedicines = $countRow['count'] ?? 0;
                                 </div>
                                
 
-                                <div class="col-lg-6">
+                                <div class="col-md-6">
                                     <div class="meta-label">Brand</div>
                                 <div class="meta-value">${escapeHtml(item.m_brand)}</div>
                                 </div>
 
-                                <div class="col-lg-6">
-                                    <div class="meta-label">Price</div>
-                                    <div class="meta-value">Php${item.m_price.toFixed(2)}</div>
-                                </div>
+                               
                                 
-                                <div class="col-lg-6">
+                                <div class="col-md-6">
                                   <div class="meta-label">Kiosk Name</div>
                                     <div class="meta-value">${escapeHtml(item.k_name)}</div>
                                 </div>
 
-                                <div class="col-lg-6">
+                                <div class="col-md-12">
                                     <div class="meta-label">Kiosk Address</div>
                                     <div class="meta-value">${escapeHtml(item.k_address)}</div>
                                 </div>

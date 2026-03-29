@@ -993,7 +993,9 @@ $kiosk_id = (int)($_SESSION['kiosk_id'] ?? 0);
 
 
     <script>
-
+        setTimeout(() => {
+            autoFullscreen();
+        }, 1500);
     </script>
 
 
