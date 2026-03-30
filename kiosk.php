@@ -1,4 +1,4 @@
-<?php $title = "MediKiosk Admin"; ?>
+<?php $title = "PharmaKiosk Admin"; ?>
 <?php include 'globals/kiosk_header.php'; ?>
 
 <body class="bg-light min-vh-100">

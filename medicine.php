@@ -1,5 +1,5 @@
 <?php
-$title = "MediKiosk Admin";
+$title = "PharmaKiosk Admin";
 
 if (session_status() === PHP_SESSION_NONE) session_start();
 

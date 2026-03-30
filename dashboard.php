@@ -1,4 +1,4 @@
-<?php $title = "MediKiosk Dashboard"; ?>
+<?php $title = "PharmaKiosk Dashboard"; ?>
 <?php include 'globals/head.php'; ?>
 <?php
 if (session_status() === PHP_SESSION_NONE) session_start();
@@ -743,7 +743,7 @@ $kiosk_id = (int)($_SESSION['kiosk_id'] ?? 0);
                 overlay.style.textAlign = "center";
                 overlay.innerHTML = `
                     <div style="max-width:520px">
-                        <div style="font-weight:900;font-size:32px;letter-spacing:-0.02em;margin-bottom:10px">MediKiosk</div>
+                        <div style="font-weight:900;font-size:32px;letter-spacing:-0.02em;margin-bottom:10px">PharmaKiosk</div>
                         <div style="font-size:18px;opacity:0.92;margin-bottom:18px">Tap to enter fullscreen kiosk mode</div>
                         <button type="button" class="btn btn-light btn-lg" id="enterFsBtn" style="border-radius:16px;font-weight:900;padding:12px 24px">
                             Enter Fullscreen

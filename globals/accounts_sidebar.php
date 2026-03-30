@@ -7,7 +7,7 @@
                 <span class="brand-icon">+</span>
             </div>
             <div class="brand-text">
-                <div class="brand-title mb-1">MediKiosk</div>
+                <div class="brand-title mb-1">PharmaKiosk</div>
                 <div class="brand-subtitle">Accounts Panel</div>
 
             </div>

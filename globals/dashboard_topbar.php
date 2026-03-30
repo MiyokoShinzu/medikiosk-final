@@ -3,7 +3,7 @@
     <!-- LEFT: Brand -->
     <div class="topbar-left">
         <div class="brand-mini">
-            <div class="brand-mini-title">MediKiosk</div>
+            <div class="brand-mini-title">PharmaKiosk</div>
             <div class="brand-mini-subtitle">
                 <?php echo $_SESSION['kiosk_name'] ?? "Medicine Kiosk"; ?>
             </div>
