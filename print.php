@@ -7,7 +7,7 @@
 </head>
 
 <body style="font-family: Arial; text-align:center; padding-top:50px;">
-    <h1>MediKiosk Receipt</h1>
+    <h1>PharmaKiosk Receipt</h1>
     <script>
         function getCartFromUrl() {
             const params = new URLSearchParams(window.location.search);
@@ -29,7 +29,7 @@
             }
 
             let text = "\x1B\x40"; // Initialize
-            text += "\x1B\x61\x01\x1B\x45\x01MediKiosk\x1B\x45\x00\n";
+            text += "\x1B\x61\x01\x1B\x45\x01PharmaKiosk\x1B\x45\x00\n";
             text += new Date().toLocaleString() + "\n";
             text += "List of Ordered Items" + "\n";
             text += "------------------------------\n";
