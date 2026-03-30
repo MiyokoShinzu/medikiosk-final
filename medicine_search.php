@@ -210,7 +210,7 @@ $totalMedicines = $countRow['count'] ?? 0;
     <header class="kiosk-topbar">
         <div class="topbar-left">
             <div class="brand-mini">
-                <div class="brand-mini-title">MediKiosk</div>
+                <div class="brand-mini-title">PharmaKiosk</div>
                 <div class="brand-mini-subtitle">
                     Medicine Availability Search
                 </div>
