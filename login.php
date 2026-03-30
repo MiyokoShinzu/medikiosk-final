@@ -1,5 +1,5 @@
 <?php
-$title = "MediKiosk Login";
+$title = "PharmaKiosk Login";
 session_start();
 
 include "src/connection.php";
@@ -119,7 +119,7 @@ if (isset($_GET["api"]) && $_GET["api"] === "login") {
                                 <div class="brand-badge mb-3">
                                     <span class="brand-icon">+</span>
                                 </div>
-                                <h1 class="brand-title mb-2">MediKiosk</h1>
+                                <h1 class="brand-title mb-2">PharmaKiosk</h1>
                                 <p class="brand-subtitle mb-0">Secure kiosk sign-in</p>
 
                                 <div class="mt-4 d-none d-lg-block">
@@ -137,7 +137,7 @@ if (isset($_GET["api"]) && $_GET["api"] === "login") {
                                     <div class="brand-badge mb-3">
                                         <span class="brand-icon">+</span>
                                     </div>
-                                    <h2 class="brand-title mb-1">MediKiosk</h2>
+                                    <h2 class="brand-title mb-1">PharmaKiosk</h2>
                                     <p class="brand-subtitle mb-0">Secure kiosk sign-in</p>
                                 </div>
 
