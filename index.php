@@ -1,4 +1,4 @@
-<?php $title = "MediKiosk Home"; ?>
+<?php $title = "PharmaKiosk Home"; ?>
 <?php include 'globals/head.php'; ?>
 
 <body class="bg-light d-flex align-items-center justify-content-center min-vh-100 overflow-hidden">
@@ -9,7 +9,7 @@
                 <span class="brand-icon">+</span>
             </div>
 
-            <h1 class="brand-title mb-2">MediKiosk</h1>
+            <h1 class="brand-title mb-2">PharmaKiosk</h1>
             <p class="brand-subtitle mb-4">Touchscreen Medical Assistance Kiosk</p>
 
             <button class="btn btn-lg btn-light tap-btn px-4 px-sm-5 py-3" type="button">
@@ -27,7 +27,7 @@
     <div id="loaderScreen" class="loader-wrap d-none">
         <div class="loader-card text-center">
             <div class="mb-4">
-                <h2 class="loader-title mb-1">MediKiosk</h2>
+                <h2 class="loader-title mb-1">PharmaKiosk</h2>
                 <p id="loadingText" class="loader-subtitle mb-0">Initializing system...</p>
             </div>
 
