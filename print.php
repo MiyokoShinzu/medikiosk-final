@@ -36,9 +36,11 @@
             text += "\x1B\x61\x00";
 
             let total = 0;
+            let d = 0;
             cart.forEach(item => {
                 const subtotal = item.price * item.qty;
                 total += subtotal;
+                d += item.discount;
                 text += item.name + "(" + item.brand + ")" + "\n";
                 let left = `${item.qty} x ${item.price.toFixed(2)}`;
                 let right = subtotal.toFixed(2);
@@ -49,13 +51,14 @@
 
             text += "------------------------------\n";
             let totalLabel = "TOTAL";
+            
             let totalValue = total.toFixed(2);
             let space = 32 - (totalLabel.length + totalValue.length);
             if (space < 1) space = 1;
             text += totalLabel + " ".repeat(space) + totalValue + "\n";
             text += "------------------------------\n";
             text += "\x1B\x61\x01Show order to the counter.\n";
-            text += "\x1B\x61\x01Thank you!\n";
+            text += "\x1B\x61\x01Thank you!"+d+"\n";
             text += "\x1D\x56\x41\x10"; // Cut
 
             window.location.href = "rawbt:" + encodeURIComponent(text);
