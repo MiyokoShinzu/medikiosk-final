@@ -924,7 +924,8 @@ $kiosk_id = (int)($_SESSION['kiosk_id'] ?? 0);
             </div>
         `;
             });
-
+            const discountSelect = document.getElementById('discountSelect');
+const discount = parseFloat(discountSelect ? discountSelect.value : 0);
             // Vertical container
             const container = document.getElementById('cartItems');
             container.innerHTML = html || "<p>No items</p>";
@@ -933,7 +934,7 @@ $kiosk_id = (int)($_SESSION['kiosk_id'] ?? 0);
             container.style.gap = "12px";
             container.style.padding = "8px";
 
-            document.getElementById('cartTotal').innerText = total.toFixed(2);
+            document.getElementById('cartTotal').innerText = `${total.toFixed(2) - discount.toFixed(2)}`;
             document.getElementById('cartCount').innerText = count;
         }
 
