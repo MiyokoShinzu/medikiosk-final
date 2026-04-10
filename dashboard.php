@@ -216,7 +216,7 @@ $kiosk_id = (int)($_SESSION['kiosk_id'] ?? 0);
         <div class="cart-footer">
             <!-- Edited discount -->
                  <!-- Discount चयन -->
-    <div class="mb-2">
+    <div class="mb-3">
         <label class="fw-bold small">Discount</label>
         <select id="discountSelect" class="form-select form-select-sm">
             <option value="0">No Discount</option>
@@ -226,8 +226,9 @@ $kiosk_id = (int)($_SESSION['kiosk_id'] ?? 0);
         </select>
     </div>
     <!-- End edited discount -->
-            <h6>Total: ₱<span id="cartTotal">0.00</span></h6>
-            <button id="print_btn" class="btn btn-success mb-2 w-100">Print Order</button>
+    <h6>Total: ₱<span id="cartTotal">0.00</span></h6>
+    <h6>Discount: ₱<span id="discountTotal">0.00</span></h6>
+    <button id="print_btn" class="btn btn-success mb-2 w-100">Print Order</button>
             <button onclick="clearCart()" class="btn btn-outline-danger w-100 mb-2">
                 Clear Cart
             </button>
@@ -934,7 +935,8 @@ const discount = parseFloat(discountSelect ? discountSelect.value : 0);
             container.style.gap = "12px";
             container.style.padding = "8px";
 
-            document.getElementById('cartTotal').innerText = `${total.toFixed(2) - discount.toFixed(2)}`;
+            document.getElementById('cartTotal').innerText = total.toFixed(2);
+            document.getElementById('discountTotal').innerText = discount.toFixed(2);
             document.getElementById('cartCount').innerText = count;
         }
 
