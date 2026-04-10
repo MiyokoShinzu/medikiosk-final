@@ -220,9 +220,9 @@ $kiosk_id = (int)($_SESSION['kiosk_id'] ?? 0);
         <label class="fw-bold small">Discount</label>
         <select id="discountSelect" class="form-select form-select-sm">
             <option value="0">No Discount</option>
-            <option value="0.05">Senior (5%)</option>
-            <option value="0.10">PWD (10%)</option>
-            <option value="0.20">Promo (20%)</option>
+            <option value="0.20">Senior (20%)</option>
+            <option value="0.20">PWD (20%)</option>
+            <option value="0.10">Solo Parent (10%)</option>
         </select>
     </div>
     <!-- End edited discount -->
@@ -820,6 +820,19 @@ $kiosk_id = (int)($_SESSION['kiosk_id'] ?? 0);
             const saved = localStorage.getItem('cart');
             if (saved) cart = JSON.parse(saved);
             renderCart();
+
+
+            // Edited load cart
+            const discountSelect = document.getElementById('discountSelect');
+
+// Load saved discount
+discountSelect.value = localStorage.getItem('discount') || 0;
+
+// Save on change
+discountSelect.addEventListener('change', () => {
+    localStorage.setItem('discount', discountSelect.value);
+    renderCart();
+});
         }
 
         // Save to localStorage
@@ -871,59 +884,147 @@ $kiosk_id = (int)($_SESSION['kiosk_id'] ?? 0);
             saveCart();
             renderCart();
         }
-        // Render cart
+        // edited render cart
         function renderCart() {
-            let html = "";
-            let total = 0;
-            let count = 0;
+    let html = "";
+    let total = 0;
+    let count = 0;
 
-            cart.forEach(item => {
-                total += item.price * item.qty;
-                count += item.qty;
+    cart.forEach(item => {
+        total += item.price * item.qty;
+        count += item.qty;
 
-                html += `
-            <div style="
-                display: flex;
-                flex-direction: row; /* image on the left, details on the right */
-                align-items: center;
-                border: 1px solid #ccc;
-                border-radius: 8px;
-                padding: 10px;
-                gap: 12px;
-                background: #fff;
-            ">
-                <!-- Item image -->
-                <img src="${item.imgUrl}" alt="${item.name}" style="width: 100px; height: 100px; object-fit: cover; border-radius: 4px;">
+        html += `
+        <div style="
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 10px;
+            gap: 12px;
+            background: #fff;
+        ">
+            <img src="${item.imgUrl}" alt="${item.name}" style="width: 100px; height: 100px; object-fit: cover; border-radius: 4px;">
 
-                <!-- Item details -->
-                <div style="flex: 1; display: flex; flex-direction: column; gap: 6px;">
-                    <strong>Name: ${item.name}</strong>
-                    <smalls>Brand: ${item.brand}</smalls>
+            <div style="flex: 1; display: flex; flex-direction: column; gap: 6px;">
+                <strong>Name: ${item.name}</strong>
+                <smalls>Brand: ${item.brand}</smalls>
 
-                    <!-- Quantity controls -->
-                    <div style="display: flex; align-items: center; gap: 4px;">
-                        <button onclick="updateQty(${item.id}, -1)" style="width: 30px;" class="btn btn-danger d-flex align-items-center justify-content-center">-</button>
-                        <input class="form-control"
-                            type="number" 
-                            min="1" 
-                            value="${item.qty}" 
-                            onchange="setQty(${item.id}, this.value)" 
-                            style="width: 100%; text-align: center;">
-                        <button onclick="updateQty(${item.id}, 1)" style="width: 30px;" class="btn btn-primary d-flex align-items-center justify-content-center bg-opacity-10s">+</button>
-                          <!-- Remove button -->
-                    <button onclick="removeFromCart(${item.id})" style="width: fit-content; border: 1px solid #454040; background: #FFF; color: #e61616; border: none; padding: 4px 8px; border-radius: 4px;">
+                <div style="display: flex; align-items: center; gap: 4px;">
+                    <button onclick="updateQty(${item.id}, -1)" style="width: 30px;" class="btn btn-danger">-</button>
+                    
+                    <input class="form-control"
+                        type="number" 
+                        min="1" 
+                        value="${item.qty}" 
+                        onchange="setQty(${item.id}, this.value)" 
+                        style="width: 100%; text-align: center;">
+                    
+                    <button onclick="updateQty(${item.id}, 1)" style="width: 30px;" class="btn btn-primary">+</button>
+
+                    <button onclick="removeFromCart(${item.id})" style="color:#e61616; border:none; background:#fff;">
                         <i class="bi bi-trash"></i>
                     </button>
-                    </div>
+                </div>
 
-                    <!-- Total price -->
-                    <div>₱${(item.price * item.qty).toFixed(2)}</div>
+                <div>₱${(item.price * item.qty).toFixed(2)}</div>
+            </div>
+        </div>
+        `;
+    });
+
+    // 👉 DISCOUNT LOGIC STARTS HERE
+    const discount = parseFloat(localStorage.getItem('discount') || 0);
+
+    let discountAmount = 0;
+
+    // supports both % and fixed discount
+    if (discount > 1) {
+        discountAmount = discount; // fixed (e.g. 100 pesos)
+    } else {
+        discountAmount = total * discount; // percentage
+    }
+
+    const finalTotal = total - discountAmount;
+    // 👉 END
+
+    // Render items
+    const container = document.getElementById('cartItems');
+    container.innerHTML = html || "<p>No items</p>";
+    container.style.display = "flex";
+    container.style.flexDirection = "column";
+    container.style.gap = "12px";
+    container.style.padding = "8px";
+
+    // 👉 Show total WITH discount breakdown
+    document.getElementById('cartTotal').innerHTML = `
+        ${finalTotal.toFixed(2)}
+        ${discountAmount > 0 
+            ? `<br><small class="text-success">Discount: -₱${discountAmount.toFixed(2)}</small>` 
+            : ""
+        }
+    `;
+
+    document.getElementById('cartCount').innerText = count;
+}
+
+
+
+
+        // Render cart
+        // function renderCart() {
+        //     let html = "";
+        //     let total = 0;
+        //     let count = 0;
+
+        //     cart.forEach(item => {
+        //         total += item.price * item.qty;
+        //         count += item.qty;
+
+        //         html += `
+        //     <div style="
+        //         display: flex;
+        //         flex-direction: row; /* image on the left, details on the right */
+        //         align-items: center;
+        //         border: 1px solid #ccc;
+        //         border-radius: 8px;
+        //         padding: 10px;
+        //         gap: 12px;
+        //         background: #fff;
+        //     ">
+        //         <!-- Item image -->
+        //         <img src="${item.imgUrl}" alt="${item.name}" style="width: 100px; height: 100px; object-fit: cover; border-radius: 4px;">
+
+        //         <!-- Item details -->
+        //         <div style="flex: 1; display: flex; flex-direction: column; gap: 6px;">
+        //             <strong>Name: ${item.name}</strong>
+        //             <smalls>Brand: ${item.brand}</smalls>
+
+        //             <!-- Quantity controls -->
+        //             <div style="display: flex; align-items: center; gap: 4px;">
+        //                 <button onclick="updateQty(${item.id}, -1)" style="width: 30px;" class="btn btn-danger d-flex align-items-center justify-content-center">-</button>
+        //                 <input class="form-control"
+        //                     type="number" 
+        //                     min="1" 
+        //                     value="${item.qty}" 
+        //                     onchange="setQty(${item.id}, this.value)" 
+        //                     style="width: 100%; text-align: center;">
+        //                 <button onclick="updateQty(${item.id}, 1)" style="width: 30px;" class="btn btn-primary d-flex align-items-center justify-content-center bg-opacity-10s">+</button>
+        //                   <!-- Remove button -->
+        //             <button onclick="removeFromCart(${item.id})" style="width: fit-content; border: 1px solid #454040; background: #FFF; color: #e61616; border: none; padding: 4px 8px; border-radius: 4px;">
+        //                 <i class="bi bi-trash"></i>
+        //             </button>
+        //             </div>
+
+        //             <!-- Total price -->
+        //             <div>₱${(item.price * item.qty).toFixed(2)}</div>
 
                   
-                </div>
-            </div>
-        `;
-            });
+        //         </div>
+        //     </div>
+        // `;
+        //     });
 
             // Vertical container
             const container = document.getElementById('cartItems');
