@@ -952,9 +952,9 @@ var discount = parseFloat(discountSelect ? discountSelect.value : 0);
             container.style.gap = "12px";
             container.style.padding = "8px";
 var discounted = total.toFixed(2) * discount.toFixed(2);
-            document.getElementById('cartTotal').innerText = total.toFixed(2);
-            document.getElementById('grandTotal').innerText = (total-discounted).toFixed(2);
-            document.getElementById('discountTotal').innerText = discounted.toFixed(2);
+            document.getElementById('cartTotal').innerText = "₱"+total.toFixed(2);
+            document.getElementById('grandTotal').innerText = "₱"+(total-discounted).toFixed(2);
+            document.getElementById('discountTotal').innerText = "₱"+discounted.toFixed(2);
             document.getElementById('cartCount').innerText = count;
         }
 
