@@ -873,6 +873,13 @@ $kiosk_id = (int)($_SESSION['kiosk_id'] ?? 0);
             renderCart();
         }
         // Render cart
+        const discountSelect = document.getElementById('discountSelect');
+
+if (discountSelect) {
+    discountSelect.addEventListener('change', () => {
+        renderCart(); // re-compute total with new discount
+    });
+}
         function renderCart() {
             let html = "";
             let total = 0;
