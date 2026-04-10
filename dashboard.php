@@ -228,6 +228,7 @@ $kiosk_id = (int)($_SESSION['kiosk_id'] ?? 0);
     <!-- End edited discount -->
     <h6>Total: ₱<span id="cartTotal">0.00</span></h6>
     <h6>Discount: ₱<span id="discountTotal">0.00</span></h6>
+    <h5><b>Grand Total: ₱<span id="grandTotal">0.00</span><b></h5>
     <button id="print_btn" class="btn btn-success mb-2 w-100">Print Order</button>
             <button onclick="clearCart()" class="btn btn-outline-danger w-100 mb-2">
                 Clear Cart
@@ -952,6 +953,7 @@ var discount = parseFloat(discountSelect ? discountSelect.value : 0);
             container.style.padding = "8px";
 var discounted = total.toFixed(2) * discount.toFixed(2);
             document.getElementById('cartTotal').innerText = total.toFixed(2);
+            document.getElementById('grandTotal').innerText = (total-discounted).toFixed(2);
             document.getElementById('discountTotal').innerText = discounted.toFixed(2);
             document.getElementById('cartCount').innerText = count;
         }
