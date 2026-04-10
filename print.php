@@ -60,7 +60,7 @@
             text += totalLabel + " ".repeat(space) + totalValue + "\n";
             text += dname+"          "+ (d*total*-1).toFixed(2)+"\n";
             text += "------------------------------\n";
-            text += "Grand Total: Php"+(total - (d*total)) +"\n";
+            text += "Grand Total"+" ".repeat(space) + (total - (d*total)) +"\n";
 
             text += "------------------------------\n\n";
             text += "\x1B\x61\x01Show order to the counter.\n";
