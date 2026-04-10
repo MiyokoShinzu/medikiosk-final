@@ -877,6 +877,7 @@ $kiosk_id = (int)($_SESSION['kiosk_id'] ?? 0);
 
 if (discountSelect) {
     discountSelect.addEventListener('change', () => {
+        localStorage.setItem('discount', discountSelect.value);
         renderCart(); // re-compute total with new discount
     });
 }
