@@ -62,9 +62,9 @@
             text += "------------------------------\n";
             text += "Grand Total: Php"+(total - (d*total)) +"\n";
 
-            text += "------------------------------\n";
+            text += "------------------------------\n\n";
             text += "\x1B\x61\x01Show order to the counter.\n";
-            text += "\x1B\x61\x01Thank you!"+d+"\n";
+            text += "\x1B\x61\x01Thank you!\n";
             text += "\x1D\x56\x41\x10"; // Cut
 
             window.location.href = "rawbt:" + encodeURIComponent(text);
