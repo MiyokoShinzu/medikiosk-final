@@ -219,10 +219,10 @@ $kiosk_id = (int)($_SESSION['kiosk_id'] ?? 0);
     <div class="mb-3">
         <label class="fw-bold small">Discount</label>
         <select id="discountSelect" class="form-select form-select-sm">
-            <option value="0">No Discount</option>
-            <option value="0.20">Senior (20%)</option>
-            <option value="0.20">PWD (20%)</option>
-            <option value="0.10">Solo Parent (10%)</option>
+            <option value="0" data-name="No Discount">No Discount</option>
+            <option value="0.20" data-name="Senior (20%)">Senior (20%)</option>
+            <option value="0.20" data-name="PWD (20%)">PWD (20%)</option>
+            <option value="0.10" data-name="Solo Parent(10%)">Solo Parent (10%)</option>
         </select>
     </div>
     <!-- End edited discount -->
@@ -877,7 +877,15 @@ $kiosk_id = (int)($_SESSION['kiosk_id'] ?? 0);
 
 if (discountSelect) {
     discountSelect.addEventListener('change', () => {
-        localStorage.setItem('discount', discountSelect.value);
+        const selectedOption = discountSelect.options[discountSelect.selectedIndex];
+        const value = selectedOption.value; // 0.10
+    const name = selectedOption.getAttribute('data-name'); // "PWD"
+
+    
+
+    // save both if needed
+    localStorage.setItem('discount', value);
+    localStorage.setItem('discount_name', name);
         renderCart(); // re-compute total with new discount
     });
 }

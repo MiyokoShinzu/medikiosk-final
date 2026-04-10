@@ -38,6 +38,7 @@
             let total = 0;
             let d = 0;
             d += parseFloat(localStorage.getItem('discount') || 0);
+            let dname - localStorage.getItem('discount_name');
             cart.forEach(item => {
                 const subtotal = item.price * item.qty;
                 total += subtotal;
@@ -58,6 +59,7 @@
             if (space < 1) space = 1;
             text += totalLabel + " ".repeat(space) + totalValue + "\n";
             text += "------------------------------\n";
+            text += `${discount_name}\n`;
             text += "\x1B\x61\x01Show order to the counter.\n";
             text += "\x1B\x61\x01Thank you!"+d+"\n";
             text += "\x1D\x56\x41\x10"; // Cut
