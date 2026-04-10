@@ -58,8 +58,11 @@
             let space = 32 - (totalLabel.length + totalValue.length);
             if (space < 1) space = 1;
             text += totalLabel + " ".repeat(space) + totalValue + "\n";
+            text += dname+"Discount          "+ (d*total*-1).toFixed(2)+"\n";
             text += "------------------------------\n";
-            text += dname+"Discount          "+ (d*total).toFixed(2)+"\n";
+            text += "Grand Total: Php"+(total - (d*total)) +"\n";
+
+            text += "------------------------------\n";
             text += "\x1B\x61\x01Show order to the counter.\n";
             text += "\x1B\x61\x01Thank you!"+d+"\n";
             text += "\x1D\x56\x41\x10"; // Cut
