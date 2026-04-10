@@ -38,7 +38,7 @@
             let total = 0;
             let d = 0;
             d += parseFloat(localStorage.getItem('discount') || 0);
-            let dname - localStorage.getItem('discount_name');
+            let dname = localStorage.getItem('discount_name');
             cart.forEach(item => {
                 const subtotal = item.price * item.qty;
                 total += subtotal;
