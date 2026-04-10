@@ -214,6 +214,20 @@ $kiosk_id = (int)($_SESSION['kiosk_id'] ?? 0);
         <div id="cartItems" class="cart-body"></div>
 
         <div class="cart-footer">
+            <div class="cart-footer">
+
+    <!-- Discount चयन -->
+    <div class="mb-2">
+        <label class="fw-bold small">Discount</label>
+        <select id="discountSelect" class="form-select form-select-sm">
+            <option value="0">No Discount</option>
+            <option value="0.05">Senior (5%)</option>
+            <option value="0.10">PWD (10%)</option>
+            <option value="0.20">Promo (20%)</option>
+        </select>
+    </div>
+
+    <h6>Total: ₱<span id="cartTotal">0.00</span></h6>
             <h6>Total: ₱<span id="cartTotal">0.00</span></h6>
             <button id="print_btn" class="btn btn-success mb-2 w-100">Print Order</button>
             <button onclick="clearCart()" class="btn btn-outline-danger w-100 mb-2">
