@@ -943,7 +943,7 @@ const discount = parseFloat(discountSelect ? discountSelect.value : 0);
             container.style.padding = "8px";
 
             document.getElementById('cartTotal').innerText = total.toFixed(2);
-            document.getElementById('discountTotal').innerText = discount.toFixed(2);
+            document.getElementById('discountTotal').innerText = total.toFixed(2) * discount.toFixed(2);
             document.getElementById('cartCount').innerText = count;
         }
 
