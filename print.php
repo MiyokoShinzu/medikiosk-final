@@ -58,7 +58,7 @@
             let space = 32 - (totalLabel.length + totalValue.length);
             if (space < 1) space = 1;
             text += totalLabel + " ".repeat(space) + totalValue + "\n";
-            text += dname+"          "+ (d*total*-1).toFixed(2)+"\n";
+            text += dname+" ".repeat(space)+(d*total*-1).toFixed(2)+"\n";
             text += "------------------------------\n";
             text += "Grand Total"+" ".repeat(space) + (total - (d*total)) +"\n";
 
