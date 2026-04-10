@@ -820,19 +820,6 @@ $kiosk_id = (int)($_SESSION['kiosk_id'] ?? 0);
             const saved = localStorage.getItem('cart');
             if (saved) cart = JSON.parse(saved);
             renderCart();
-
-
-            // Edited load cart
-            const discountSelect = document.getElementById('discountSelect');
-
-// Load saved discount
-discountSelect.value = localStorage.getItem('discount') || 0;
-
-// Save on change
-discountSelect.addEventListener('change', () => {
-    localStorage.setItem('discount', discountSelect.value);
-    renderCart();
-});
         }
 
         // Save to localStorage
@@ -936,20 +923,7 @@ discountSelect.addEventListener('change', () => {
                 </div>
             </div>
         `;
-            }
-            const discount = parseFloat(localStorage.getItem('discount') || 0);
-
-let discountAmount = 0;
-
-if (discount > 1) {
-    discountAmount = discount; // fixed discount
-} else {
-    discountAmount = total * discount; // percentage
-}
-
-const finalTotal = total - discountAmount;
-        
-        );
+            });
 
             // Vertical container
             const container = document.getElementById('cartItems');
