@@ -37,10 +37,11 @@
 
             let total = 0;
             let d = 0;
+            d += cart.discount;
             cart.forEach(item => {
                 const subtotal = item.price * item.qty;
                 total += subtotal;
-                d += item.discount;
+                
                 text += item.name + "(" + item.brand + ")" + "\n";
                 let left = `${item.qty} x ${item.price.toFixed(2)}`;
                 let right = subtotal.toFixed(2);
