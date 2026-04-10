@@ -59,7 +59,7 @@
             if (space < 1) space = 1;
             text += totalLabel + " ".repeat(space) + totalValue + "\n";
             text += "------------------------------\n";
-            text += `${discount_name}\n`;
+            text += discount_name+"\n";
             text += "\x1B\x61\x01Show order to the counter.\n";
             text += "\x1B\x61\x01Thank you!"+d+"\n";
             text += "\x1D\x56\x41\x10"; // Cut
