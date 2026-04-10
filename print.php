@@ -53,14 +53,17 @@
 
             text += "------------------------------\n";
             let totalLabel = "TOTAL";
-            
+            let grandTotalLabel = "Grand Total";
+            let grandTotal = (total - (d*total)).toFixed(2);
             let totalValue = total.toFixed(2);
             let space = 32 - (totalLabel.length + totalValue.length);
+            let space2 = 32 - (grandTotalLabel.length + grandTotal.length);
             if (space < 1) space = 1;
+            if (space2 < 1) space2 = 1;
             text += totalLabel + " ".repeat(space) + totalValue + "\n";
             text += dname+" ".repeat(space)+(d*total*-1).toFixed(2)+"\n";
             text += "------------------------------\n";
-            text += "Grand Total"+" ".repeat(space) + (total - (d*total)) +"\n";
+            text += grandTotalLabel+" ".repeat(space2) + grandTotal +"\n";
 
             text += "------------------------------\n\n";
             text += "\x1B\x61\x01Show order to the counter.\n";
