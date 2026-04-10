@@ -876,7 +876,7 @@ $kiosk_id = (int)($_SESSION['kiosk_id'] ?? 0);
             let html = "";
             let total = 0;
             let count = 0;
-            let discount = document.querySelector('discountSelect').value;
+            
             cart.forEach(item => {
                 total += item.price * item.qty;
                 count += item.qty;
@@ -917,7 +917,7 @@ $kiosk_id = (int)($_SESSION['kiosk_id'] ?? 0);
                     </div>
 
                     <!-- Total price -->
-                    <div>₱${(item.price * item.qty).toFixed(2) - discount}</div>
+                    <div>₱${(item.price * item.qty).toFixed(2)}</div>
 
                   
                 </div>
