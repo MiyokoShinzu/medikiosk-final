@@ -933,7 +933,7 @@ if (discountSelect) {
         `;
             });
             const discountSelect = document.getElementById('discountSelect');
-const discount = parseFloat(discountSelect ? discountSelect.value : 0);
+var discount = parseFloat(discountSelect ? discountSelect.value : 0);
             // Vertical container
             const container = document.getElementById('cartItems');
             container.innerHTML = html || "<p>No items</p>";
