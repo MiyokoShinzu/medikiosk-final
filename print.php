@@ -65,7 +65,7 @@
             if (space2 < 1) space2 = 1;
             if (space3 < 1) space3 = 1;
             text += totalLabel + " ".repeat(space) + totalValue + "\n";
-            text += discountLabel+" ".repeat(space3)+(discountValue).toFixed(2)+"\n";
+            text += discountLabel+" ".repeat(space3)+(discountValue)+"\n";
             text += "------------------------------\n";
             text += grandTotalLabel+" ".repeat(space2) + grandTotal +"\n";
 
