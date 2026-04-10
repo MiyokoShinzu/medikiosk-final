@@ -57,7 +57,7 @@
             let grandTotal = (total - (d*total)).toFixed(2);
             let totalValue = total.toFixed(2);
             let discountValue = (total*d).toFixed(2);
-            let dicountLabel = dname;
+            let discountLabel = dname;
             let space = 32 - (totalLabel.length + totalValue.length);
             let space2 = 32 - (grandTotalLabel.length + grandTotal.length);
             let space3 = 32 - (discountLabel.length + discountValue.length);
